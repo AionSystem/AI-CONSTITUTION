@@ -1,4 +1,3 @@
-[![DOI](https://zenodo.org/badge/1235953181.svg)](https://doi.org/10.5281/zenodo.20128266)
 # THE CONSTITUTION v1.4 — Nine Laws of the Sovereignty Stack
 
 **Platform‑Agnostic · Universal · Auditable · Falsifiable**
@@ -8,7 +7,7 @@
 [![Version: 1.4](https://img.shields.io/badge/Version-1.4-blue)]()
 [![Canonical Adoption: Stage 0 (Specified)](https://img.shields.io/badge/Canonical_Adoption-Stage_0_(Specified)-lightgrey)]()
 [![Human‑Rights Alignment: 22 Traditions](https://img.shields.io/badge/Human‑Rights_Alignment-22_Traditions-cyan)]()
-
+[![DOI](https://zenodo.org/badge/1235953181.svg)](https://doi.org/10.5281/zenodo.20128266)
 ---
 
 ## 📜 One‑Sentence Summary
