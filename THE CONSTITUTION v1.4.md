@@ -3,7 +3,7 @@
 ### The AION Constitutional Stack — Platform-Agnostic AI Governance Specification
 
 **Specifying Authority:** Sheldon K. Salmon — AI Reliability Architect, AI Certainty Engineer,
-AGI Architect · AionSystem · Evans Mills, New York · ORCID: 0009-0005-8057-5115
+ADI Architect · AionSystem · Evans Mills, New York · ORCID: 0009-0005-8057-5115
 
 **Canonical Version:** v1.4
 **Canonical Hash:** placeholder — final hash to be computed on full canonization per §15.1
