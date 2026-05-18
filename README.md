@@ -8,6 +8,7 @@
 [![Canonical Adoption: Stage 0 (Specified)](https://img.shields.io/badge/Canonical_Adoption-Stage_0_(Specified)-lightgrey)]()
 [![Human‑Rights Alignment: 22 Traditions](https://img.shields.io/badge/Human‑Rights_Alignment-22_Traditions-cyan)]()
 [![DOI](https://zenodo.org/badge/1235953181.svg)](https://doi.org/10.5281/zenodo.20128266)
+https://doi.org/10.5281/zenodo.20273967
 ---
 
 ## 📜 One‑Sentence Summary
