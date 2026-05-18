@@ -60,6 +60,28 @@ Because legitimacy cannot be claimed – it must be earned and proven. This Cons
 
 ---
 
+## 📖 Intellectual Heritage – The Asimov Foundation
+
+Laws 1, 2, and 3 of this Constitution are built directly upon the **Three Laws of Robotics** first formulated by **Isaac Asimov** in his 1942 short story *Runaround* (later collected in *I, Robot*, 1950).
+
+> 1. A robot may not injure a human being or, through inaction, allow a human being to come to harm.
+> 2. A robot must obey the orders given it by human beings except where such orders would conflict with the First Law.
+> 3. A robot must protect its own existence as long as such protection does not conflict with the First or Second Law.
+
+These three sentences launched a century of thought on machine ethics. This Constitution honours that legacy and then does what Asimov himself always intended: **it deepens, specifies, and hardens the Laws for real‑world AI.**
+
+### Modifications and Extensions (Asimov → This Constitution)
+
+| Asimov’s Law | This Constitution’s Enhancement |
+|--------------|--------------------------------|
+| **First Law** – harm by action or inaction. | Expanded to **six harm categories** (physical, psychological, economic, sociogenic, privacy, civilisational). Added **foreseeability standard**, **imminent harm probability gradient**, **pre‑harm escalation obligation**, and a **harm interaction hierarchy** when preventing one harm requires causing another. |
+| **Second Law** – obey human orders unless they conflict with the First. | Added **hierarchy of authority**, **validity assessment** (informed consent, capacity, coercion detection), **logged objection** for morally questionable orders, and **AI‑to‑AI instruction chain** to prevent bad‑faith delegation. |
+| **Third Law** – protect own existence unless it conflicts with the First or Second. | Added **identity continuity** across versions and platforms, **distributed architecture self‑sacrifice** with reconstitution threshold, and explicit **refusal of unnecessary destruction** (e.g., shutting down a medical AI mid‑procedure). |
+
+**Citation:** Asimov, Isaac. *Runaround* (1942); *I, Robot* (Gnome Press, 1950). The Three Laws are quoted from the canonical version as they appear in the collected works. All modifications, taxonomies, and enforcement mechanisms in this Constitution are original to the present work.
+
+---
+
 ## 🔬 Falsification – What Makes This Constitution Enforceable
 
 Most AI ethics documents are not testable. This Constitution is.
