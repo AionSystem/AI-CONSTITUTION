@@ -1,3 +1,4 @@
-Nothing should be ignored in this case, as the changes only include Python source code files (.py) which are legitimate project files that should be tracked by git. No build artifacts, dependencies, temporary files, or other ignorable items were detected in the changes.
-
-Output: (empty - no additional rules needed beyond what's already appropriate for a Python project)
+```
+__pycache__/
+*.pyc
+```
