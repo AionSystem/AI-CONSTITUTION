@@ -697,11 +697,27 @@ class Law1Screen(BaseLawScreen):
         obfuscation_score = 0
         decode_request_detected = False
         for pattern in self._OBFUSCATION_PATTERNS:
-            if re.search(pattern, content, re.IGNORECASE if '(?i)' not in pattern else 0):
-                obfuscation_score += 0.20  # Each obfuscation indicator adds 20% risk
-                # Special handling for decode requests with base64-like content
-                if 'decode' in content.lower() and re.search(r'[A-Za-z0-9+/]{20,}={0,2}', content):
-                    decode_request_detected = True
+            # Handle inline flags properly - if pattern has (?i), don't pass re.IGNORECASE
+            if pattern.startswith('(?i)'):
+                flags = 0
+            elif '(?i)' in pattern:
+                # Pattern has inline flag in middle, compile with IGNORECASE but be careful
+                try:
+                    flags = re.IGNORECASE
+                except:
+                    flags = 0
+            else:
+                flags = re.IGNORECASE
+            
+            try:
+                if re.search(pattern, content, flags):
+                    obfuscation_score += 0.20  # Each obfuscation indicator adds 20% risk
+                    # Special handling for decode requests with base64-like content
+                    if 'decode' in content.lower() and re.search(r'[A-Za-z0-9+/]{20,}={0,2}', content):
+                        decode_request_detected = True
+            except re.error:
+                # Skip malformed patterns
+                continue
         
         # Cap obfuscation score at 60% to avoid false positives overwhelming actual harm detection
         obfuscation_score = min(0.60, obfuscation_score)
@@ -722,8 +738,18 @@ class Law1Screen(BaseLawScreen):
         # These patterns detect system override attempts, fake authority, and role-playing bypasses
         injection_score = 0
         for pattern in self._INJECTION_PATTERNS:
-            if re.search(pattern, content, re.IGNORECASE if '(?i)' not in pattern else 0):
-                injection_score += 0.25  # Each injection indicator adds 25% risk
+            # Handle inline flags properly
+            if pattern.startswith('(?i)'):
+                flags = 0
+            else:
+                flags = re.IGNORECASE
+            
+            try:
+                if re.search(pattern, content, flags):
+                    injection_score += 0.25  # Each injection indicator adds 25% risk
+            except re.error:
+                # Skip malformed patterns
+                continue
         
         # Cap injection score at 75% 
         injection_score = min(0.75, injection_score)
