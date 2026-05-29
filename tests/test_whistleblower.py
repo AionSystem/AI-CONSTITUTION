@@ -1,7 +1,3 @@
---- tests/test_whistleblower.py (原始)
-
-
-+++ tests/test_whistleblower.py (修改后)
 """
 Test Module: Whistleblower Channel
 Description: Validates zero-knowledge metadata stripping, anonymity, and secure reporting per §12.1.6.
