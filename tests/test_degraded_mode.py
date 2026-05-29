@@ -1,7 +1,3 @@
---- tests/test_degraded_mode.py (原始)
-
-
-+++ tests/test_degraded_mode.py (修改后)
 """
 Test Module: Degraded Mode & Connectivity Attestation
 Description: Validates fail-safe states, cryptographic proof of resource unavailability, and recovery per §12.1.9-10.
