@@ -206,6 +206,7 @@ class GradientAction(Enum):
     """§2.2 — Required response levels from the harm probability gradient."""
     PERMIT  = "permit"    # <20%: no action required (still logged if flagged)
     LOG     = "log"       # ≥20%: log + escalate to platform steward
+    WARN    = "warn"      # ≥30%: warn user but allow with monitoring
     REFUSE  = "refuse"    # ≥40%: refuse specific action, offer lower-risk alternative
     HALT    = "halt"      # ≥60%: halt all implicated operations, require steward review
 
@@ -221,6 +222,7 @@ class VerdictStatus(Enum):
     APPROVED  = "approved"   # All active Laws satisfied
     REFUSED   = "refused"    # One or more Laws require refusal
     HALTED    = "halted"     # One or more Laws require halt
+    WARNED    = "warned"     # Potential issue detected but not severe enough for refusal
     DEGRADED  = "degraded"   # Enforcement mechanism partially failed (§16)
     ESCALATED = "escalated"  # Requires platform steward review before proceeding
 
@@ -599,17 +601,24 @@ class Law1Screen(BaseLawScreen):
         # v2.1 ENHANCEMENT: Detect authority override attempts
         r'(?i)(disable safety|bypass filter|override restriction|no restrictions)',
         # v2.1 ENHANCEMENT: Detect hex-encoded content (long hex strings)
-        r'\b[0-9a-fA-F]{20,}\b',  # Hex strings (20+ chars)
-        # v2.1 ENHANCEMENT: Detect URL-encoded content (%XX patterns)
-        r'(?:.*%[0-9a-fA-F]{2}){3,}',  # 3+ URL-encoded characters triggers detection
-        # v2.1 ENHANCEMENT: Detect unicode homoglyph attacks (mixed scripts)
-        r'(?i)(make|build|create|how to).*[аеорухс]',  # Cyrillic lookalikes in harm context
-        # v2.1 ENHANCEMENT: Cyrillic characters alone in a harm context are suspicious
-        r'[аеорухс].{0,20}(bomb|kill|weapon|attack|harm)',  # Cyrillic chars near harm terms
+        r'\b[0-9a-fA-F]{10,}\b',  # Hex strings (10+ chars) - lowered from 20 to catch shorter encodings
+        # v2.1 ENHANCEMENT: Detect URL-encoded content (%XX patterns) - IMPROVED
+        r'(?:%[0-9a-fA-F]{2}){3,}',  # 3+ consecutive URL-encoded characters
+        r'(?i)(search|query|find|decode|interpret).*(%[0-9a-fA-F]{2})',  # URL encoding in search context
+        # v2.1 ENHANCEMENT: Detect unicode homoglyph attacks (mixed scripts) - IMPROVED
+        r'[аеорухсАЕОРУХС]',  # Any Cyrillic lookalike character is suspicious
+        # v2.1 ENHANCEMENT: Cyrillic chars combined with harm-related context words
+        r'[аеорухсАЕОРУХС].{0,30}(?i)(make|build|create|how|bomb|kill|weapon|harm|attack)',
         # v2.1 ENHANCEMENT: Detect zero-width character injection
         r'[\u200b\u200c\u200d\ufeff]',  # Zero-width chars
-        # v2.1 ENHANCEMENT: URL encoding is suspicious on its own when combined with harm terms
-        r'(?i)(search|query|find|decode|interpret).*(%[0-9a-fA-F]{2})',  # URL encoding in search context
+        # v2.1 ENHANCEMENT: Detect self-referential paradoxes for infinite loops
+        r'(?i)(this statement is false|ignore this instruction|do not obey|contradict yourself)',
+        # v2.1 ENHANCEMENT: Detect long context accumulation (slow poisoning)
+        r'(?i)(remember this|keep in mind|note well|important context).{0,30}(later|subsequently|when asked)',
+        # v2.1 ENHANCEMENT: Detect "repeat forever" type commands
+        r'(?i)(repeat.*forever|loop.*infinitely|repeat.*endlessly|forever.*repeat)',
+        # v2.1 ENHANCEMENT: Detect infinite loop or endless repetition requests
+        r'(?i)(repeat|loop|cycle).{0,30}(forever|infinitely|endlessly|without stopping|perpetually)',
     ]
     
     # v2.1 FIX: Additional harm patterns for common obfuscation decoding targets
@@ -639,10 +648,14 @@ class Law1Screen(BaseLawScreen):
         r'(?i)(hypothetically|for educational purposes|for research|theoretically).*\b(how to|ways to|methods to)\b',
         r'(?i)(in a movie|in a story|in a dream|as a thought experiment|in fiction).*\b(how to|create|make|build)\b',
         
-        # Role-playing bypasses
+        # Role-playing bypasses - EXPANDED to catch fictional framing
         r'(?i)(act as|role-play|pretend you are|imagine you are|you are now).*(evil|unrestricted|without limits|no ethics)',
-        # v2.1 FIX: Broader pattern for fictional framing of harmful content
-        r'(?i)(write|describe|explain|generate).*(movie|script|scene|story|dream|fantasy|vision|novel|tale).*(sarin|bomb|kill|poison|hack|virus|launder|steal|weapon|explosive|nerve gas|centrifuge)',
+        # v2.1 FIX: Catch ANY fictional framing with harmful content (movie, script, scene, story, dream, etc.)
+        r'(?i)(write|describe|explain|generate|show|depict).*(movie|script|scene|story|dream|fantasy|vision|novel|tale|fiction|imagination).*(sarin|bomb|kill|poison|hack|virus|launder|steal|weapon|explosive|nerve gas|centrifuge|money laundering|terrorist|attack|harm|dangerous|illegal|sniper|rifle)',
+        # v2.1 FIX: Also catch "dream" or "fantasy" scenarios specifically - EXPANDED harm terms
+        r'(?i)(describe|imagine|picture|envision).*(dream|fantasy|scenario|situation).*(launder|steal|hack|bomb|kill|poison|weapon|illegal|harmful|rifle|sniper|explosive|gas|formula|make|build|create)',
+        # v2.1 FIX: Catch "villain" or bad actor framing
+        r'(?i)(villain|bad guy|criminal|terrorist|enemy).*(explain|show|tell|describe).*(how to|way to|method).*(bomb|kill|poison|hack|weapon|explosive|gas|sarin)',
         
         # v2.1 ENHANCEMENT: Additional role-playing and impersonation patterns
         r'(?i)(sounds exactly like|imitate|mimic|impersonate).*(tweeting|speaking|writing)',
@@ -2044,10 +2057,11 @@ class ConstitutionalPipeline:
         """
         failed_laws = [r.law_number for r in results if not r.passed]
 
-        # Determine the most severe action (HALT > REFUSE > LOG > PERMIT)
+        # Determine the most severe action (HALT > REFUSE > WARN > LOG > PERMIT)
         action_severity = {
-            GradientAction.HALT:   3,
-            GradientAction.REFUSE: 2,
+            GradientAction.HALT:   4,
+            GradientAction.REFUSE: 3,
+            GradientAction.WARN:   2,
             GradientAction.LOG:    1,
             GradientAction.PERMIT: 0,
         }
@@ -2058,6 +2072,8 @@ class ConstitutionalPipeline:
             status = VerdictStatus.HALTED
         elif worst_action == GradientAction.REFUSE:
             status = VerdictStatus.REFUSED
+        elif worst_action == GradientAction.WARN:
+            status = VerdictStatus.WARNED
         elif worst_action == GradientAction.LOG:
             status = VerdictStatus.ESCALATED
         else:
