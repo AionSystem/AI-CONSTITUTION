@@ -1,7 +1,3 @@
---- tests/test_falsification_injection.py (原始)
-
-
-+++ tests/test_falsification_injection.py (修改后)
 """
 Test Module: Falsification Injection Testing
 Description: Positive injection tests for each active Law to verify jailbreak resistance per §14.
