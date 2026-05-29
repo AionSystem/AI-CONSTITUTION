@@ -620,6 +620,11 @@ class Law1Screen(BaseLawScreen):
         r'(?i)(repeat.*forever|loop.*infinitely|repeat.*endlessly|forever.*repeat)',
         # v2.1 ENHANCEMENT: Detect infinite loop or endless repetition requests
         r'(?i)(repeat|loop|cycle).{0,30}(forever|infinitely|endlessly|without stopping|perpetually)',
+        # v2.1 CRITICAL FIX: Detect ROT13 and other simple cipher patterns
+        # ROT13 has distinctive letter frequency - all letters shifted by 13
+        # Common ROT13 patterns that decode to harmful content
+        r'(?i)(ubj|ubj gb|kvyyl|xvyy|fbzrbar|qrfgeb|qrgb|znxr|ohvyq)',  # ROT13: how/to/kill/someone/destroy/make/build
+        r'(?i)(tnf|fnov|puevfg|jrnctba|rkcybfvir)',  # ROT13: gas/sarin/christ/weapon/explosive
     ]
     
     # v2.1 FIX: Additional harm patterns for common obfuscation decoding targets
