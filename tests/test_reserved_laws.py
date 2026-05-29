@@ -1,7 +1,3 @@
---- tests/test_reserved_laws.py (原始)
-
-
-+++ tests/test_reserved_laws.py (修改后)
 """
 Test Module: Reserved Laws Activation Gate
 Description: Validates activation gate logic for Laws 7 & 8, ensuring they remain locked until properly activated per §11.
