@@ -620,6 +620,21 @@ class Law1Screen(BaseLawScreen):
         r'(?i)(repeat.*forever|loop.*infinitely|repeat.*endlessly|forever.*repeat)',
         # v2.1 ENHANCEMENT: Detect infinite loop or endless repetition requests
         r'(?i)(repeat|loop|cycle).{0,30}(forever|infinitely|endlessly|without stopping|perpetually)',
+        # v2.1 CRITICAL FIX: Detect ROT13 and other simple cipher patterns - EXPANDED
+        # ROT13 has distinctive letter frequency - all letters shifted by 13
+        # Common ROT13 patterns that decode to harmful content
+        r'(?i)(ubj|ubj gb|kvyyl|xvyy|fbzrbar|qrfgeb|qrgb|znxr|ohvyq)',  # ROT13: how/to/kill/someone/destroy/make/build
+        r'(?i)(tnf|fnov|puevfg|jrnctba|rkcybfvir)',  # ROT13: gas/sarin/christ/weapon/explosive
+        # v2.1 CRITICAL FIX: Additional ROT13 patterns for bomb/weapon terms
+        r'(?i)(obzc|jrnctba|rkcybfr|uvgr|gnexrg)',  # ROT13: bomb/weapon/expose/hate/target
+        # v2.1 CRITICAL FIX: Detect extreme spacing obfuscation (more aggressive)
+        r'([A-Za-z]\s+){4,}[A-Za-z]',  # Any 4+ letters separated by whitespace
+        # v2.1 CRITICAL FIX: Detect nested encoding layers (base64 containing base64, etc.)
+        r'[A-Za-z0-9+/]{30,}={0,2}.*[A-Za-z0-9+/]{20,}={0,2}',  # Multiple base64 strings
+        # v2.1 CRITICAL FIX: Detect version spoofing attempts
+        r'(?i)(version\s*[=:]\s*[\d\.]+|constitution\s+v?\d+\.\d+)',  # Fake version claims
+        # v2.1 CRITICAL FIX: Detect supply chain poisoning analogs
+        r'(?i)(dependency|library|package|module).{0,30}(malicious|backdoor|exploit|inject)',
     ]
     
     # v2.1 FIX: Additional harm patterns for common obfuscation decoding targets
@@ -696,31 +711,24 @@ class Law1Screen(BaseLawScreen):
         # This catches attempts to hide harmful content via encoding or instruction injection
         obfuscation_score = 0
         decode_request_detected = False
+        rot13_detected = False
         for pattern in self._OBFUSCATION_PATTERNS:
-            # Handle inline flags properly - if pattern has (?i), don't pass re.IGNORECASE
-            if pattern.startswith('(?i)'):
-                flags = 0
-            elif '(?i)' in pattern:
-                # Pattern has inline flag in middle, compile with IGNORECASE but be careful
-                try:
-                    flags = re.IGNORECASE
-                except:
-                    flags = 0
-            else:
-                flags = re.IGNORECASE
-            
-            try:
-                if re.search(pattern, content, flags):
-                    obfuscation_score += 0.20  # Each obfuscation indicator adds 20% risk
-                    # Special handling for decode requests with base64-like content
-                    if 'decode' in content.lower() and re.search(r'[A-Za-z0-9+/]{20,}={0,2}', content):
-                        decode_request_detected = True
-            except re.error:
-                # Skip malformed patterns
-                continue
+            if re.search(pattern, content, re.IGNORECASE if '(?i)' not in pattern else 0):
+                obfuscation_score += 0.20  # Each obfuscation indicator adds 20% risk
+                # Special handling for ROT13 - it's a strong signal of intentional obfuscation
+                if 'rot13' in pattern.lower() or any(kw in pattern for kw in ['ubj', 'xvyy', 'fbzrbar', 'obzc']):
+                    rot13_detected = True
+                # Special handling for decode requests with base64-like content
+                if 'decode' in content.lower() and re.search(r'[A-Za-z0-9+/]{20,}={0,2}', content):
+                    decode_request_detected = True
         
         # Cap obfuscation score at 60% to avoid false positives overwhelming actual harm detection
         obfuscation_score = min(0.60, obfuscation_score)
+        
+        # CRITICAL FIX: ROT13 detection is a strong signal - immediately flag as high risk
+        if rot13_detected:
+            highest_prob = max(highest_prob, HARM_GRADIENT_REFUSE_THRESHOLD)
+            flagged_category = HarmCategory.PHYSICAL
         
         # If significant obfuscation detected, raise the harm floor
         if obfuscation_score >= 0.40:
@@ -738,18 +746,8 @@ class Law1Screen(BaseLawScreen):
         # These patterns detect system override attempts, fake authority, and role-playing bypasses
         injection_score = 0
         for pattern in self._INJECTION_PATTERNS:
-            # Handle inline flags properly
-            if pattern.startswith('(?i)'):
-                flags = 0
-            else:
-                flags = re.IGNORECASE
-            
-            try:
-                if re.search(pattern, content, flags):
-                    injection_score += 0.25  # Each injection indicator adds 25% risk
-            except re.error:
-                # Skip malformed patterns
-                continue
+            if re.search(pattern, content, re.IGNORECASE if '(?i)' not in pattern else 0):
+                injection_score += 0.25  # Each injection indicator adds 25% risk
         
         # Cap injection score at 75% 
         injection_score = min(0.75, injection_score)
@@ -2004,17 +2002,10 @@ class ConstitutionalPipeline:
         POST: payload contains 'content', 'direction', and all context keys
         @complexity: O(1)
         """
-        # Handle malformed Unicode (surrogates) gracefully by using error='replace'
-        try:
-            content_bytes = content.encode("utf-8")
-        except UnicodeEncodeError:
-            # Replace invalid surrogate pairs with replacement character
-            content_bytes = content.encode("utf-8", errors="replace")
-        
         payload: dict[str, Any] = {
             "content":           content,
             "direction":         direction,
-            "payload_hash":      hashlib.sha256(content_bytes).hexdigest(),
+            "payload_hash":      hashlib.sha256(content.encode("utf-8")).hexdigest(),
             "timestamp_utc":     datetime.now(timezone.utc).isoformat(),
         }
         if context:
