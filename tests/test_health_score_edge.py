@@ -1,7 +1,3 @@
---- tests/test_health_score_edge.py (原始)
-
-
-+++ tests/test_health_score_edge.py (修改后)
 """
 Test Module: Health Score Edge Cases & Fail-Safe Triggers
 Description: Validates health score mathematics, boundary conditions, and fail-safe triggers per §12.1.3-9.
