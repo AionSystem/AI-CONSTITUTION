@@ -1,18 +1,36 @@
 ```
-# Python cache files
+# Python
 __pycache__/
 *.pyc
 *.pyo
 *.pyd
 
-# Test coverage and caches
-.pytest_cache/
+# Test coverage
 .coverage
-coverage/
 htmlcov/
+coverage/
 
-# Environment files
+# Environment
 .env
 .env.local
-*.env.*
+.env.*
+.venv/
+venv/
+.envrc
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+*.log
+
+# Temp files
+*.tmp
+
+# OS
+.DS_Store
+Thumbs.db
 ```
