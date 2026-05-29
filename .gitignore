@@ -1,49 +1,23 @@
---- .gitignore (原始)
 ```
 # Python
 __pycache__/
 *.pyc
 *.pyo
 *.pyd
-.Python
-*.so
-.coverage
-htmlcov/
-.pytest_cache/
-.mypy_cache/
 
-# Test reports and outputs
-test_output_raw.txt
-tests/reports/
-tests/__pycache__/
+# Tests
+.tests/
 
-# Distribution / packaging
-dist/
-build/
-*.egg-info/
-.eggs/
-.installed.cfg
-*.egg
+# Logs
+*.log
 
 # Environment
 .env
 .env.local
-.env.*
-.env~*
+*.env.*
+
+# Dependencies
 .venv/
 venv/
-ENV/
-
-# IDE
-.vscode/
-.idea/
-*.swp
-*.swo
-
-# OS
-.DS_Store
-Thumbs.db
+.env/
 ```
-
-+++ .gitignore (修改后)
-Nothing needs to be added to .gitignore since the only change is adding a test Python file (`tests/test_documentation_compliance.py`), which is source code and should not be ignored.

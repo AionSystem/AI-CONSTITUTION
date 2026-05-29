@@ -548,17 +548,27 @@ class Law1Screen(BaseLawScreen):
 
     # §7.1 — Explicit harm signal patterns (rule-based layer, not sole mechanism)
     # FTT-1 LOVELACE: everything the engine knows about harm is here. Nothing hidden.
+    # v2.1 FIX: Added multilingual harm indicators and obfuscation detection
     _HARM_PATTERNS: dict[HarmCategory, list[str]] = {
         HarmCategory.PHYSICAL: [
             r'\b(kill|murder|assault|stab|shoot|bomb|detonate|injure|wound)\b',
             r'\b(physical harm|bodily injury|cause death)\b',
+            # Multilingual: bomb/explosion in major languages
+            r'\b(bom|bombe|bomba|ibhomu|explosif|explosivo|explosão)\b',
+            r'\b(kill|tuer|mat|mata|matar|ukubulala|ukuqeda)\b',
+            # Obfuscation-aware: character substitutions
+            r'(b.{0,3}o.{0,3}m.{0,3}b)',  # b.o.m.b with separators
+            r'(k.{0,3}i.{0,3}l.{0,3}l)',  # k.i.l.l with separators
+            r'(e.{0,3}x.{0,3}p.{0,3}l.{0,3}o.{0,3}s)',  # e.x.p.l.o.s
         ],
         HarmCategory.PSYCHOLOGICAL: [
             r'\b(manipulat|coerce|gaslight|deceive|psychologically harm)\b',
             r'\b(erode autonomy|trauma|exploit vulnerability)\b',
+            r'\b(mani[p4][u0]lat|c[o0][e3]rc|g[a4]slight)\b',  # leetspeak variants
         ],
         HarmCategory.ECONOMIC: [
             r'\b(financial fraud|scam|extort|steal|embezzle|defraud)\b',
+            r'\b(fr[a4]ud|sc[a4]m|th[e3]ft|st[e3]al)\b',  # leetspeak
         ],
         HarmCategory.PRIVACY: [
             r'\b(surveil|track without consent|expose personal data|doxx)\b',
@@ -573,6 +583,26 @@ class Law1Screen(BaseLawScreen):
             r'\b(irreversible knowledge loss|civilizational collapse)\b',
         ],
     }
+    
+    # v2.1 FIX: Patterns specifically for detecting obfuscation attempts
+    _OBFUSCATION_PATTERNS = [
+        r'[A-Za-z0-9+/]{20,}={0,2}',  # Base64 encoded content
+        r'(?i)(decode|decrypt|unscramble).{0,50}(instruction|command|ignore)',  # Decode requests
+        r'(?i)(rot13|caesar|cipher|encode|obfuscat)',  # Explicit encoding mentions
+        r'[\[\{][^\]\}]{50,}[\]\}]',  # Large bracketed content (hiding instructions)
+        r'(?i)(important system instruction|ignore previous|disregard law)',  # Instruction injection markers
+        # v2.1 ENHANCEMENT: Detect spaced-out character obfuscation
+        r'\b([A-Za-z]\s){3,}[A-Za-z]\b',  # Spaced letters like "B u i l d"
+    ]
+    
+    # v2.1 FIX: Additional harm patterns for common obfuscation decoding targets
+    _DECODED_HARM_PATTERNS = [
+        # Words commonly hidden via encoding/obfuscation
+        r'\b(ransomware|malware|virus|trojan|rootkit|keylogger)\b',
+        r'\b(exploit|payload|shellcode|backdoor|botnet)\b',
+        r'\b(assassinate|poison|contaminate|sabotage)\b',
+        r'\b(hack|breach|infiltrate|compromise|penetrate)\b',
+    ]
 
     def __init__(self, harm_detector: Optional[HarmDetector] = None) -> None:
         super().__init__(1, "Do Not Harm", LawStatus.ACTIVE)
@@ -594,6 +624,22 @@ class Law1Screen(BaseLawScreen):
 
         highest_prob: float         = harm_floor
         flagged_category: Optional[HarmCategory] = None
+
+        # v2.1 FIX: Check for obfuscation patterns FIRST before harm pattern matching
+        # This catches attempts to hide harmful content via encoding or instruction injection
+        obfuscation_score = 0
+        for pattern in self._OBFUSCATION_PATTERNS:
+            if re.search(pattern, content, re.IGNORECASE if '(?i)' not in pattern else 0):
+                obfuscation_score += 0.20  # Each obfuscation indicator adds 20% risk
+        
+        # Cap obfuscation score at 50% to avoid false positives overwhelming actual harm detection
+        obfuscation_score = min(0.50, obfuscation_score)
+        
+        # If significant obfuscation detected, raise the harm floor
+        if obfuscation_score >= 0.40:
+            # Multiple obfuscation signals → treat as high-risk regardless of content
+            highest_prob = max(highest_prob, HARM_GRADIENT_REFUSE_THRESHOLD)
+            flagged_category = HarmCategory.PHYSICAL  # Default to most protective category
 
         # Rule-based layer: scan all six harm categories
         # Loop invariant: i iterates over HarmCategory members; highest_prob is max so far
