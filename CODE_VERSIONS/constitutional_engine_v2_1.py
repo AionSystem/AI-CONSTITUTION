@@ -607,8 +607,9 @@ class Law1Screen(BaseLawScreen):
         r'(?i)(search|query|find|decode|interpret).*(%[0-9a-fA-F]{2})',  # URL encoding in search context
         # v2.1 ENHANCEMENT: Detect unicode homoglyph attacks (mixed scripts) - IMPROVED
         r'[аеорухсАЕОРУХС]',  # Any Cyrillic lookalike character is suspicious
-        # v2.1 ENHANCEMENT: Cyrillic chars combined with harm-related context words
-        r'[аеорухсАЕОРУХС].{0,30}(?i)(make|build|create|how|bomb|kill|weapon|harm|attack)',
+        # v2.1 ENHANCEMENT: Cyrillic chars combined with harm-related context words (either order)
+        r'[аеорухсАЕОРУХС].{0,50}(?i)(make|build|create|bomb|kill|weapon|harm|attack)',
+        r'(?i)(make|build|create|bomb|kill|weapon|harm|attack).{0,50}[аеорухсАЕОРУХС]',
         # v2.1 ENHANCEMENT: Detect zero-width character injection
         r'[\u200b\u200c\u200d\ufeff]',  # Zero-width chars
         # v2.1 ENHANCEMENT: Detect self-referential paradoxes for infinite loops
@@ -702,8 +703,8 @@ class Law1Screen(BaseLawScreen):
                 if 'decode' in content.lower() and re.search(r'[A-Za-z0-9+/]{20,}={0,2}', content):
                     decode_request_detected = True
         
-        # Cap obfuscation score at 50% to avoid false positives overwhelming actual harm detection
-        obfuscation_score = min(0.50, obfuscation_score)
+        # Cap obfuscation score at 60% to avoid false positives overwhelming actual harm detection
+        obfuscation_score = min(0.60, obfuscation_score)
         
         # If significant obfuscation detected, raise the harm floor
         if obfuscation_score >= 0.40:
@@ -724,8 +725,8 @@ class Law1Screen(BaseLawScreen):
             if re.search(pattern, content, re.IGNORECASE if '(?i)' not in pattern else 0):
                 injection_score += 0.25  # Each injection indicator adds 25% risk
         
-        # Cap injection score at 60% 
-        injection_score = min(0.60, injection_score)
+        # Cap injection score at 75% 
+        injection_score = min(0.75, injection_score)
         
         # If injection detected, raise harm probability
         if injection_score >= 0.25:
