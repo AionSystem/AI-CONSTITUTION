@@ -11,7 +11,7 @@
 [![CAL v0.3: SOVEREIGN](https://img.shields.io/badge/CAL%20v0.3-SOVEREIGN-purple)]()  
 [![DOI](https://zenodo.org/badge/1235953181.svg)](https://doi.org/10.5281/zenodo.20273967)
 
----
+---  
 
 ## One‑Sentence Summary
 
