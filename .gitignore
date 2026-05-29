@@ -1,19 +1,4 @@
 ```
-# Python
 __pycache__/
 *.pyc
-*.pyo
-*.pyd
-.Python
-*.so
-.coverage
-.coverage.*
-
-# Testing
-.pytest_cache/
-.hypothesis/
-
-# Directories
-CODE_VERSIONS/__pycache__/
-tests/__pycache__/
 ```
