@@ -1,7 +1,3 @@
---- tests/test_enforcement_elements.py (原始)
-
-
-+++ tests/test_enforcement_elements.py (修改后)
 """
 Test Module: Binding Enforcement Elements
 Description: Validates the 12 specific enforcement requirements defined in §12.1.
