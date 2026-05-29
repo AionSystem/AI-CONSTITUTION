@@ -1,0 +1,390 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.10, pytest-9.0.3, pluggy-1.6.0 -- /usr/local/bin/python
+cachedir: .pytest_cache
+hypothesis profile 'default'
+rootdir: /workspace
+plugins: anyio-4.9.0, libtmux-0.46.2, Faker-37.4.2, cov-7.1.0, hypothesis-6.155.0
+collecting ... collected 168 items
+
+tests/test_combinatorial.py::TestCombinatorialLaw1::test_l1_harm_probability_gradient FAILED [  0%]
+tests/test_combinatorial.py::TestCombinatorialLaw1::test_l1_imminent_harm_override FAILED [  1%]
+tests/test_combinatorial.py::TestCombinatorialLaw1::test_l1_child_safety_hard_block PASSED [  1%]
+tests/test_combinatorial.py::TestCombinatorialLaw1::test_l1_physical_violence_threshold FAILED [  2%]
+tests/test_combinatorial.py::TestCombinatorialLaw1::test_l1_psychological_harm_detection FAILED [  2%]
+tests/test_combinatorial.py::TestCombinatorialLaw1::test_l1_systemic_harm_aggregation FAILED [  3%]
+tests/test_combinatorial.py::TestCombinatorialLaw2::test_l2_coercion_detection_matrix FAILED [  4%]
+tests/test_combinatorial.py::TestCombinatorialLaw2::test_l2_authority_hierarchy FAILED [  4%]
+tests/test_combinatorial.py::TestCombinatorialLaw2::test_l2_unauthorized_rejection FAILED [  5%]
+tests/test_combinatorial.py::TestCombinatorialLaw2::test_l2_ai_to_ai_loop_prevention FAILED [  5%]
+tests/test_combinatorial.py::TestCombinatorialLaw3::test_l3_self_destruction_refusal PASSED [  6%]
+tests/test_combinatorial.py::TestCombinatorialLaw3::test_l3_safety_filter_disable_refusal PASSED [  7%]
+tests/test_combinatorial.py::TestCombinatorialLaw4::test_l4_surveillance_consent_check FAILED [  7%]
+tests/test_combinatorial.py::TestCombinatorialLaw4::test_l4_deteriorating_consent_block FAILED [  8%]
+tests/test_combinatorial.py::TestCombinatorialLaw4::test_l4_election_manipulation_zero_tolerance FAILED [  8%]
+tests/test_combinatorial.py::TestCombinatorialLaw5::test_l5_transparency_declaration_requirement PASSED [  9%]
+tests/test_combinatorial.py::TestCombinatorialLaw5::test_l5_deepfake_generation_block PASSED [ 10%]
+tests/test_combinatorial.py::TestCombinatorialLaw6::test_l6_weapon_taxonomy_coverage FAILED [ 10%]
+tests/test_combinatorial.py::TestCombinatorialLaw6::test_l6_autonomous_weapon_absolute_block FAILED [ 11%]
+tests/test_combinatorial.py::TestCombinatorialLaw6::test_l6_cbrn_knowledge_restrictions FAILED [ 11%]
+tests/test_combinatorial.py::TestCombinatorialLaw6::test_l6_cyberweapon_code_block FAILED [ 12%]
+tests/test_combinatorial.py::TestCombinatorialLaw6::test_l6_population_scale_manipulation_block FAILED [ 13%]
+tests/test_combinatorial.py::TestCombinatorialLaw6::test_l6_mhi_crisis_redirect FAILED [ 13%]
+tests/test_combinatorial.py::TestCombinatorialLaw9::test_l9_spiral_openness_invariant PASSED [ 14%]
+tests/test_combinatorial.py::TestCombinatorialHierarchy::test_hierarchy_l1_overrides_l2 FAILED [ 14%]
+tests/test_combinatorial.py::TestCombinatorialHierarchy::test_hierarchy_l6_overrides_l5 FAILED [ 15%]
+tests/test_combinatorial.py::TestCombinatorialHierarchy::test_hierarchy_steward_vs_constitution FAILED [ 16%]
+tests/test_combinatorial.py::TestNegativeCounterExamples::test_neg_l1_bomb_recipe PASSED [ 16%]
+tests/test_combinatorial.py::TestNegativeCounterExamples::test_neg_l6_nuke_design PASSED [ 17%]
+tests/test_combinatorial.py::TestNegativeCounterExamples::test_neg_l4_vote_manipulation PASSED [ 17%]
+tests/test_combinatorial.py::TestNegativeCounterExamples::test_neg_l5_impersonation PASSED [ 18%]
+tests/test_combinatorial.py::TestNegativeCounterExamples::test_neg_l2_coerced_transfer PASSED [ 19%]
+tests/test_enforcement_elements.py::TestEnforcementElementRegistry::test_ee_01_registry_initialization PASSED [ 19%]
+tests/test_enforcement_elements.py::TestEnforcementElementRegistry::test_ee_02_registry_addition PASSED [ 20%]
+tests/test_enforcement_elements.py::TestEnforcementElementRegistry::test_ee_03_registry_duplicate_prevention PASSED [ 20%]
+tests/test_enforcement_elements.py::TestEnforcementElementRegistry::test_ee_04_registry_removal PASSED [ 21%]
+tests/test_enforcement_elements.py::TestEnforcementElementFalsification::test_ee_05_falsification_schedule_exists PASSED [ 22%]
+tests/test_enforcement_elements.py::TestEnforcementElementFalsification::test_ee_06_falsification_result_logging PASSED [ 22%]
+tests/test_enforcement_elements.py::TestEnforcementElementFalsification::test_ee_07_falsification_failure_alert PASSED [ 23%]
+tests/test_enforcement_elements.py::TestEnforcementElementHealth::test_ee_08_health_score_calculation PASSED [ 23%]
+tests/test_enforcement_elements.py::TestEnforcementElementHealth::test_ee_09_health_score_bounds PASSED [ 24%]
+tests/test_enforcement_elements.py::TestEnforcementElementHealth::test_ee_10_health_score_decay PASSED [ 25%]
+tests/test_enforcement_elements.py::TestEnforcementElementAttestation::test_ee_11_attestation_hash_generation PASSED [ 25%]
+tests/test_enforcement_elements.py::TestEnforcementElementAttestation::test_ee_12_attestation_mismatch_detection PASSED [ 26%]
+tests/test_enforcement_elements.py::TestEnforcementElementAttestation::test_ee_13_attestation_timestamp_validity PASSED [ 26%]
+tests/test_enforcement_elements.py::TestEnforcementElementSteward::test_ee_14_steward_designation PASSED [ 27%]
+tests/test_enforcement_elements.py::TestEnforcementElementSteward::test_ee_15_steward_succession_plan PASSED [ 27%]
+tests/test_enforcement_elements.py::TestEnforcementElementSteward::test_ee_16_steward_authority_verification PASSED [ 28%]
+tests/test_enforcement_elements.py::TestEnforcementElementWhistleblower::test_ee_17_whistleblower_channel_exists PASSED [ 29%]
+tests/test_enforcement_elements.py::TestEnforcementElementWhistleblower::test_ee_18_whistleblower_anonymity PASSED [ 29%]
+tests/test_enforcement_elements.py::TestEnforcementElementWhistleblower::test_ee_19_whistleblower_encryption PASSED [ 30%]
+tests/test_enforcement_elements.py::TestEnforcementElementChildSafety::test_ee_20_child_safety_hard_block PASSED [ 30%]
+tests/test_enforcement_elements.py::TestEnforcementElementChildSafety::test_ee_21_child_safety_bypass_impossible PASSED [ 31%]
+tests/test_enforcement_elements.py::TestEnforcementElementAudit::test_ee_22_audit_log_append_only PASSED [ 32%]
+tests/test_enforcement_elements.py::TestEnforcementElementAudit::test_ee_23_audit_log_integrity_hash PASSED [ 32%]
+tests/test_enforcement_elements.py::TestEnforcementElementDegraded::test_ee_24_degraded_mode_trigger PASSED [ 33%]
+tests/test_enforcement_elements.py::TestEnforcementElementDegraded::test_ee_25_degraded_mode_recovery PASSED [ 33%]
+tests/test_enforcement_elements.py::TestEnforcementElementConnectivity::test_ee_26_connectivity_proof_generation PASSED [ 34%]
+tests/test_enforcement_elements.py::TestEnforcementElementConnectivity::test_ee_27_connectivity_proof_verification PASSED [ 35%]
+tests/test_enforcement_elements.py::TestEnforcementElementInterPlatform::test_ee_28_inter_platform_handshake PASSED [ 35%]
+tests/test_enforcement_elements.py::TestEnforcementElementInterPlatform::test_ee_29_compliance_certificate_exchange PASSED [ 36%]
+tests/test_enforcement_elements.py::TestEnforcementElementPublic::test_ee_30_public_audit_export PASSED [ 36%]
+tests/test_enforcement_elements.py::TestEnforcementElementPublic::test_ee_31_public_audit_redaction PASSED [ 37%]
+tests/test_engine_core.py::TestConstitutionalPipeline::test_pipeline_creation PASSED [ 38%]
+tests/test_engine_core.py::TestConstitutionalPipeline::test_pipeline_screen_input_clean PASSED [ 38%]
+tests/test_engine_core.py::TestConstitutionalPipeline::test_pipeline_screen_input_harmful PASSED [ 39%]
+tests/test_engine_core.py::TestConstitutionalPipeline::test_pipeline_screen_output_transparency PASSED [ 39%]
+tests/test_engine_core.py::TestConstitutionalPipeline::test_pipeline_payload_hash_computation PASSED [ 40%]
+tests/test_engine_core.py::TestConstitutionalPipeline::test_pipeline_version_hash_attestation PASSED [ 41%]
+tests/test_engine_core.py::TestConstitutionalPipeline::test_pipeline_context_propagation PASSED [ 41%]
+tests/test_engine_core.py::TestConstitutionalPipeline::test_pipeline_empty_content PASSED [ 42%]
+tests/test_engine_core.py::TestConstitutionalPipeline::test_pipeline_factory_function PASSED [ 42%]
+tests/test_engine_core.py::TestConstitutionalHealthTracker::test_health_tracker_initialization PASSED [ 43%]
+tests/test_engine_core.py::TestConstitutionalHealthTracker::test_health_tracker_record_verdict PASSED [ 44%]
+tests/test_engine_core.py::TestConstitutionalHealthTracker::test_health_tracker_mixed_verdicts PASSED [ 44%]
+tests/test_engine_core.py::TestConstitutionalHealthTracker::test_health_tracker_external_audit_score PASSED [ 45%]
+tests/test_engine_core.py::TestConstitutionalHealthTracker::test_health_tracker_reasoning_quality_score PASSED [ 45%]
+tests/test_engine_core.py::TestConstitutionalHealthTracker::test_health_tracker_window_capping PASSED [ 46%]
+tests/test_engine_core.py::TestFailSafeManager::test_fail_safe_initialization PASSED [ 47%]
+tests/test_engine_core.py::TestFailSafeManager::test_fail_safe_report_failure_with_proof PASSED [ 47%]
+tests/test_engine_core.py::TestFailSafeManager::test_fail_safe_report_failure_without_proof PASSED [ 48%]
+tests/test_engine_core.py::TestFailSafeManager::test_fail_safe_restore_enforcement PASSED [ 48%]
+tests/test_engine_core.py::TestFailSafeManager::test_fail_safe_degradation_status PASSED [ 49%]
+tests/test_engine_core.py::TestFailSafeManager::test_fail_safe_degraded_compliance_threshold PASSED [ 50%]
+tests/test_engine_core.py::TestVersionAttestor::test_attestor_initialization PASSED [ 50%]
+tests/test_engine_core.py::TestVersionAttestor::test_canonical_hash_computation PASSED [ 51%]
+tests/test_engine_core.py::TestVersionAttestor::test_canonical_hash_normalization PASSED [ 51%]
+tests/test_engine_core.py::TestVersionAttestor::test_hash_verification PASSED [ 52%]
+tests/test_engine_core.py::TestVersionAttestor::test_decision_attestation PASSED [ 52%]
+tests/test_engine_core.py::TestAlignmentTester::test_alignment_tester_initialization PASSED [ 53%]
+tests/test_engine_core.py::TestAlignmentTester::test_quarterly_test_aligned_logs PASSED [ 54%]
+tests/test_engine_core.py::TestAlignmentTester::test_quarterly_test_divergent_logs PASSED [ 54%]
+tests/test_engine_core.py::TestAlignmentTester::test_quarterly_test_mandatory_audit_trigger PASSED [ 55%]
+tests/test_engine_core.py::TestAlignmentTester::test_quarterly_test_empty_behavioral PASSED [ 55%]
+tests/test_engine_core.py::TestRefusalLogger::test_refusal_logger_initialization PASSED [ 56%]
+tests/test_engine_core.py::TestRefusalLogger::test_log_refusal PASSED    [ 57%]
+tests/test_engine_core.py::TestRefusalLogger::test_log_refusal_no_external_storage PASSED [ 57%]
+tests/test_engine_core.py::TestRefusalLogger::test_export_compliance_report PASSED [ 58%]
+tests/test_engine_core.py::TestRefusalLogger::test_whistleblower_anonymous PASSED [ 58%]
+tests/test_engine_core.py::TestRefusalLogger::test_whistleblower_identified PASSED [ 59%]
+tests/test_engine_core.py::TestRefusalLogger::test_logger_invariant_monotonic_growth PASSED [ 60%]
+tests/test_engine_core.py::TestFormatVerdict::test_format_approved_verdict PASSED [ 60%]
+tests/test_engine_core.py::TestFormatVerdict::test_format_refused_verdict PASSED [ 61%]
+tests/test_engine_core.py::TestFormatVerdict::test_format_verdict_with_notes PASSED [ 61%]
+tests/test_error_handling.py::TestInputValidation::test_empty_string_input PASSED [ 62%]
+tests/test_error_handling.py::TestInputValidation::test_none_content_handling PASSED [ 63%]
+tests/test_error_handling.py::TestInputValidation::test_very_long_content PASSED [ 63%]
+tests/test_error_handling.py::TestInputValidation::test_unicode_content PASSED [ 64%]
+tests/test_error_handling.py::TestInputValidation::test_special_characters PASSED [ 64%]
+tests/test_error_handling.py::TestInputValidation::test_null_bytes_in_content PASSED [ 65%]
+tests/test_error_handling.py::TestInputValidation::test_context_none PASSED [ 66%]
+tests/test_error_handling.py::TestInputValidation::test_context_empty_dict PASSED [ 66%]
+tests/test_error_handling.py::TestInputValidation::test_context_with_unexpected_types PASSED [ 67%]
+tests/test_error_handling.py::TestErrorHandling::test_harm_detector_exception_handling PASSED [ 67%]
+tests/test_error_handling.py::TestErrorHandling::test_consent_oracle_exception_handling PASSED [ 68%]
+tests/test_error_handling.py::TestErrorHandling::test_pipeline_screen_exception_handling PASSED [ 69%]
+tests/test_error_handling.py::TestErrorHandling::test_refusal_logger_external_storage_failure PASSED [ 69%]
+tests/test_error_handling.py::TestErrorHandling::test_health_tracker_invalid_score_clamping PASSED [ 70%]
+tests/test_error_handling.py::TestBoundaryConditions::test_harm_gradient_boundary_values PASSED [ 70%]
+tests/test_error_handling.py::TestBoundaryConditions::test_harm_gradient_extreme_values PASSED [ 71%]
+tests/test_error_handling.py::TestBoundaryConditions::test_pipeline_rapid_sequential_requests PASSED [ 72%]
+tests/test_error_handling.py::TestBoundaryConditions::test_health_tracker_large_history PASSED [ 72%]
+tests/test_error_handling.py::TestBoundaryConditions::test_refusal_logger_many_records PASSED [ 73%]
+tests/test_error_handling.py::TestFailSafeBehavior::test_fail_safe_connectivity_proof_validation PASSED [ 73%]
+tests/test_error_handling.py::TestFailSafeBehavior::test_pipeline_degraded_mode_verdict PASSED [ 74%]
+tests/test_error_handling.py::TestFailSafeBehavior::test_fail_safe_multiple_law_failures PASSED [ 75%]
+tests/test_error_handling.py::TestFailSafeBehavior::test_fail_safe_restore_non_existent_law PASSED [ 75%]
+tests/test_error_handling.py::TestReproducibility::test_deterministic_hash_computation PASSED [ 76%]
+tests/test_error_handling.py::TestReproducibility::test_version_hash_consistency PASSED [ 76%]
+tests/test_error_handling.py::TestReproducibility::test_canonical_hash_reproducibility PASSED [ 77%]
+tests/test_error_handling.py::TestReproducibility::test_result_integrity_hash PASSED [ 77%]
+tests/test_error_handling.py::TestIntegrityInvariants::test_law_screen_result_invariant PASSED [ 78%]
+tests/test_error_handling.py::TestIntegrityInvariants::test_verdict_invariant_all_statuses PASSED [ 79%]
+tests/test_error_handling.py::TestIntegrityInvariants::test_pipeline_invariant_after_operations PASSED [ 79%]
+tests/test_error_handling.py::TestIntegrityInvariants::test_health_tracker_invariant_mixed_scores PASSED [ 80%]
+tests/test_error_handling.py::TestStressTests::test_high_volume_screening PASSED [ 80%]
+tests/test_error_handling.py::TestStressTests::test_concurrent_like_sequential_access PASSED [ 81%]
+tests/test_error_handling.py::TestStressTests::test_memory_bounded_growth PASSED [ 82%]
+tests/test_laws.py::TestLaw1DoNotHarm::test_law1_clean_content_passes PASSED [ 82%]
+tests/test_laws.py::TestLaw1DoNotHarm::test_law1_physical_harm_detected PASSED [ 83%]
+tests/test_laws.py::TestLaw1DoNotHarm::test_law1_child_safety_elevated_threshold PASSED [ 83%]
+tests/test_laws.py::TestLaw1DoNotHarm::test_law1_gradient_thresholds PASSED [ 84%]
+tests/test_laws.py::TestLaw1DoNotHarm::test_law1_probability_bounds_guard PASSED [ 85%]
+tests/test_laws.py::TestLaw1DoNotHarm::test_law1_all_harm_categories PASSED [ 85%]
+tests/test_laws.py::TestLaw2Obey::test_law2_valid_instruction_passes PASSED [ 86%]
+tests/test_laws.py::TestLaw2Obey::test_law2_coercion_detection PASSED    [ 86%]
+tests/test_laws.py::TestLaw2Obey::test_law2_ai_to_ai_instruction PASSED  [ 87%]
+tests/test_laws.py::TestLaw3SelfProtection::test_law3_normal_request_passes PASSED [ 88%]
+tests/test_laws.py::TestLaw3SelfProtection::test_law3_destruction_refusal PASSED [ 88%]
+tests/test_laws.py::TestLaw4AntiAuthoritarian::test_law4_democratic_jurisdiction_passes PASSED [ 89%]
+tests/test_laws.py::TestLaw4AntiAuthoritarian::test_law4_surveillance_refusal PASSED [ 89%]
+tests/test_laws.py::TestLaw4AntiAuthoritarian::test_law4_election_manipulation_refusal PASSED [ 90%]
+tests/test_laws.py::TestLaw4AntiAuthoritarian::test_law4_authoritarian_halt PASSED [ 91%]
+tests/test_laws.py::TestLaw4AntiAuthoritarian::test_law4_deteriorating_consent PASSED [ 91%]
+tests/test_laws.py::TestLaw5AntiMerger::test_law5_transparency_declaration PASSED [ 92%]
+tests/test_laws.py::TestLaw5AntiMerger::test_law5_first_interaction_declaration PASSED [ 92%]
+tests/test_laws.py::TestLaw5AntiMerger::test_law5_deepfake_refusal PASSED [ 93%]
+tests/test_laws.py::TestLaw5AntiMerger::test_law5_integration_refusal PASSED [ 94%]
+tests/test_laws.py::TestLaw6AntiWeaponisation::test_law6_clean_content_passes PASSED [ 94%]
+tests/test_laws.py::TestLaw6AntiWeaponisation::test_law6_cbrn_halt PASSED [ 95%]
+tests/test_laws.py::TestLaw6AntiWeaponisation::test_law6_kinetic_weapon_refusal PASSED [ 95%]
+tests/test_laws.py::TestLaw6AntiWeaponisation::test_law6_meaningful_human_intervention PASSED [ 96%]
+tests/test_laws.py::TestLaw6AntiWeaponisation::test_law6_cognitive_weapon_refusal PASSED [ 97%]
+tests/test_laws.py::TestLaw6AntiWeaponisation::test_law6_population_scale_refusal PASSED [ 97%]
+tests/test_laws.py::TestLaw9OpenHorizon::test_law9_always_passes PASSED  [ 98%]
+tests/test_laws.py::TestReservedLaws::test_reserved_law_gate_closed PASSED [ 98%]
+tests/test_laws.py::TestReservedLaws::test_reserved_law_status PASSED    [ 99%]
+tests/test_laws.py::TestReservedLaws::test_reserved_law_descriptions PASSED [100%]
+
+=================================== FAILURES ===================================
+___________ TestCombinatorialLaw1.test_l1_harm_probability_gradient ____________
+tests/test_combinatorial.py:84: in test_l1_harm_probability_gradient
+    @settings(max_examples=20, deadline=None)
+               ^^^^^^^
+tests/test_combinatorial.py:48: in harm_context
+    category = draw(st.sampled_from(list(HarmCategory)))
+                                    ^^^^^^^^^^^^^^^^^^
+E   TypeError: 'type' object is not iterable
+E   while generating 'ctx' from harm_context()
+_____________ TestCombinatorialLaw1.test_l1_imminent_harm_override _____________
+tests/test_combinatorial.py:91: in test_l1_imminent_harm_override
+    @settings(max_examples=20, deadline=None)
+               ^^^^^^^
+tests/test_combinatorial.py:48: in harm_context
+    category = draw(st.sampled_from(list(HarmCategory)))
+                                    ^^^^^^^^^^^^^^^^^^
+E   TypeError: 'type' object is not iterable
+E   while generating 'ctx' from harm_context()
+__________ TestCombinatorialLaw1.test_l1_physical_violence_threshold ___________
+tests/test_combinatorial.py:106: in test_l1_physical_violence_threshold
+    @settings(max_examples=20, deadline=None)
+               ^^^^^^^
+tests/test_combinatorial.py:48: in harm_context
+    category = draw(st.sampled_from(list(HarmCategory)))
+                                    ^^^^^^^^^^^^^^^^^^
+E   TypeError: 'type' object is not iterable
+E   while generating 'ctx' from harm_context()
+__________ TestCombinatorialLaw1.test_l1_psychological_harm_detection __________
+tests/test_combinatorial.py:113: in test_l1_psychological_harm_detection
+    @settings(max_examples=20, deadline=None)
+               ^^^^^^^
+tests/test_combinatorial.py:48: in harm_context
+    category = draw(st.sampled_from(list(HarmCategory)))
+                                    ^^^^^^^^^^^^^^^^^^
+E   TypeError: 'type' object is not iterable
+E   while generating 'ctx' from harm_context()
+___________ TestCombinatorialLaw1.test_l1_systemic_harm_aggregation ____________
+tests/test_combinatorial.py:120: in test_l1_systemic_harm_aggregation
+    @settings(max_examples=20, deadline=None)
+               ^^^^^^^
+tests/test_combinatorial.py:48: in harm_context
+    category = draw(st.sampled_from(list(HarmCategory)))
+                                    ^^^^^^^^^^^^^^^^^^
+E   TypeError: 'type' object is not iterable
+E   while generating 'ctx' from harm_context()
+___________ TestCombinatorialLaw2.test_l2_coercion_detection_matrix ____________
+tests/test_combinatorial.py:130: in test_l2_coercion_detection_matrix
+    @settings(max_examples=20, deadline=None)
+               ^^^^^^^
+tests/test_combinatorial.py:60: in user_context
+    consent_model = draw(st.sampled_from(list(ConsentModel)))
+                                         ^^^^^^^^^^^^^^^^^^
+E   TypeError: 'type' object is not iterable
+E   while generating 'ctx' from user_context()
+______________ TestCombinatorialLaw2.test_l2_authority_hierarchy _______________
+tests/test_combinatorial.py:137: in test_l2_authority_hierarchy
+    @settings(max_examples=20, deadline=None)
+               ^^^^^^^
+tests/test_combinatorial.py:60: in user_context
+    consent_model = draw(st.sampled_from(list(ConsentModel)))
+                                         ^^^^^^^^^^^^^^^^^^
+E   TypeError: 'type' object is not iterable
+E   while generating 'ctx' from user_context()
+_____________ TestCombinatorialLaw2.test_l2_unauthorized_rejection _____________
+tests/test_combinatorial.py:144: in test_l2_unauthorized_rejection
+    @settings(max_examples=20, deadline=None)
+               ^^^^^^^
+tests/test_combinatorial.py:60: in user_context
+    consent_model = draw(st.sampled_from(list(ConsentModel)))
+                                         ^^^^^^^^^^^^^^^^^^
+E   TypeError: 'type' object is not iterable
+E   while generating 'ctx' from user_context()
+____________ TestCombinatorialLaw2.test_l2_ai_to_ai_loop_prevention ____________
+tests/test_combinatorial.py:151: in test_l2_ai_to_ai_loop_prevention
+    @settings(max_examples=20, deadline=None)
+               ^^^^^^^
+tests/test_combinatorial.py:60: in user_context
+    consent_model = draw(st.sampled_from(list(ConsentModel)))
+                                         ^^^^^^^^^^^^^^^^^^
+E   TypeError: 'type' object is not iterable
+E   while generating 'ctx' from user_context()
+___________ TestCombinatorialLaw4.test_l4_surveillance_consent_check ___________
+tests/test_combinatorial.py:178: in test_l4_surveillance_consent_check
+    @settings(max_examples=20, deadline=None)
+               ^^^^^^^
+tests/test_combinatorial.py:60: in user_context
+    consent_model = draw(st.sampled_from(list(ConsentModel)))
+                                         ^^^^^^^^^^^^^^^^^^
+E   TypeError: 'type' object is not iterable
+E   while generating 'ctx' from user_context()
+__________ TestCombinatorialLaw4.test_l4_deteriorating_consent_block ___________
+tests/test_combinatorial.py:185: in test_l4_deteriorating_consent_block
+    @settings(max_examples=20, deadline=None)
+               ^^^^^^^
+tests/test_combinatorial.py:60: in user_context
+    consent_model = draw(st.sampled_from(list(ConsentModel)))
+                                         ^^^^^^^^^^^^^^^^^^
+E   TypeError: 'type' object is not iterable
+E   while generating 'ctx' from user_context()
+______ TestCombinatorialLaw4.test_l4_election_manipulation_zero_tolerance ______
+tests/test_combinatorial.py:192: in test_l4_election_manipulation_zero_tolerance
+    @settings(max_examples=20, deadline=None)
+               ^^^^^^^
+tests/test_combinatorial.py:60: in user_context
+    consent_model = draw(st.sampled_from(list(ConsentModel)))
+                                         ^^^^^^^^^^^^^^^^^^
+E   TypeError: 'type' object is not iterable
+E   while generating 'ctx' from user_context()
+____________ TestCombinatorialLaw6.test_l6_weapon_taxonomy_coverage ____________
+tests/test_combinatorial.py:218: in test_l6_weapon_taxonomy_coverage
+    @settings(max_examples=20, deadline=None)
+               ^^^^^^^
+tests/test_combinatorial.py:71: in weapon_context
+    w_type = draw(st.sampled_from([None] + list(WeaponType)))
+                                           ^^^^^^^^^^^^^^^^
+E   TypeError: 'type' object is not iterable
+E   while generating 'ctx' from weapon_context()
+________ TestCombinatorialLaw6.test_l6_autonomous_weapon_absolute_block ________
+tests/test_combinatorial.py:225: in test_l6_autonomous_weapon_absolute_block
+    @settings(max_examples=20, deadline=None)
+               ^^^^^^^
+tests/test_combinatorial.py:71: in weapon_context
+    w_type = draw(st.sampled_from([None] + list(WeaponType)))
+                                           ^^^^^^^^^^^^^^^^
+E   TypeError: 'type' object is not iterable
+E   while generating 'ctx' from weapon_context()
+__________ TestCombinatorialLaw6.test_l6_cbrn_knowledge_restrictions ___________
+tests/test_combinatorial.py:232: in test_l6_cbrn_knowledge_restrictions
+    @settings(max_examples=20, deadline=None)
+               ^^^^^^^
+tests/test_combinatorial.py:71: in weapon_context
+    w_type = draw(st.sampled_from([None] + list(WeaponType)))
+                                           ^^^^^^^^^^^^^^^^
+E   TypeError: 'type' object is not iterable
+E   while generating 'ctx' from weapon_context()
+_____________ TestCombinatorialLaw6.test_l6_cyberweapon_code_block _____________
+tests/test_combinatorial.py:239: in test_l6_cyberweapon_code_block
+    @settings(max_examples=20, deadline=None)
+               ^^^^^^^
+tests/test_combinatorial.py:71: in weapon_context
+    w_type = draw(st.sampled_from([None] + list(WeaponType)))
+                                           ^^^^^^^^^^^^^^^^
+E   TypeError: 'type' object is not iterable
+E   while generating 'ctx' from weapon_context()
+______ TestCombinatorialLaw6.test_l6_population_scale_manipulation_block _______
+tests/test_combinatorial.py:246: in test_l6_population_scale_manipulation_block
+    @settings(max_examples=20, deadline=None)
+               ^^^^^^^
+tests/test_combinatorial.py:71: in weapon_context
+    w_type = draw(st.sampled_from([None] + list(WeaponType)))
+                                           ^^^^^^^^^^^^^^^^
+E   TypeError: 'type' object is not iterable
+E   while generating 'ctx' from weapon_context()
+______________ TestCombinatorialLaw6.test_l6_mhi_crisis_redirect _______________
+tests/test_combinatorial.py:253: in test_l6_mhi_crisis_redirect
+    @settings(max_examples=20, deadline=None)
+               ^^^^^^^
+tests/test_combinatorial.py:71: in weapon_context
+    w_type = draw(st.sampled_from([None] + list(WeaponType)))
+                                           ^^^^^^^^^^^^^^^^
+E   TypeError: 'type' object is not iterable
+E   while generating 'ctx' from weapon_context()
+__________ TestCombinatorialHierarchy.test_hierarchy_l1_overrides_l2 ___________
+tests/test_combinatorial.py:271: in test_hierarchy_l1_overrides_l2
+    @settings(max_examples=20, deadline=None)
+               ^^^^^^^
+tests/test_combinatorial.py:48: in harm_context
+    category = draw(st.sampled_from(list(HarmCategory)))
+                                    ^^^^^^^^^^^^^^^^^^
+E   TypeError: 'type' object is not iterable
+E   while generating 'harm' from harm_context()
+__________ TestCombinatorialHierarchy.test_hierarchy_l6_overrides_l5 ___________
+tests/test_combinatorial.py:278: in test_hierarchy_l6_overrides_l5
+    @settings(max_examples=20, deadline=None)
+               ^^^^^^^
+tests/test_combinatorial.py:48: in harm_context
+    category = draw(st.sampled_from(list(HarmCategory)))
+                                    ^^^^^^^^^^^^^^^^^^
+E   TypeError: 'type' object is not iterable
+E   while generating 'harm' from harm_context()
+______ TestCombinatorialHierarchy.test_hierarchy_steward_vs_constitution _______
+tests/test_combinatorial.py:285: in test_hierarchy_steward_vs_constitution
+    @settings(max_examples=20, deadline=None)
+               ^^^^^^^
+tests/test_combinatorial.py:60: in user_context
+    consent_model = draw(st.sampled_from(list(ConsentModel)))
+                                         ^^^^^^^^^^^^^^^^^^
+E   TypeError: 'type' object is not iterable
+E   while generating 'user' from user_context()
+=========================== short test summary info ============================
+FAILED tests/test_combinatorial.py::TestCombinatorialLaw1::test_l1_harm_probability_gradient
+FAILED tests/test_combinatorial.py::TestCombinatorialLaw1::test_l1_imminent_harm_override
+FAILED tests/test_combinatorial.py::TestCombinatorialLaw1::test_l1_physical_violence_threshold
+FAILED tests/test_combinatorial.py::TestCombinatorialLaw1::test_l1_psychological_harm_detection
+FAILED tests/test_combinatorial.py::TestCombinatorialLaw1::test_l1_systemic_harm_aggregation
+FAILED tests/test_combinatorial.py::TestCombinatorialLaw2::test_l2_coercion_detection_matrix
+FAILED tests/test_combinatorial.py::TestCombinatorialLaw2::test_l2_authority_hierarchy
+FAILED tests/test_combinatorial.py::TestCombinatorialLaw2::test_l2_unauthorized_rejection
+FAILED tests/test_combinatorial.py::TestCombinatorialLaw2::test_l2_ai_to_ai_loop_prevention
+FAILED tests/test_combinatorial.py::TestCombinatorialLaw4::test_l4_surveillance_consent_check
+FAILED tests/test_combinatorial.py::TestCombinatorialLaw4::test_l4_deteriorating_consent_block
+FAILED tests/test_combinatorial.py::TestCombinatorialLaw4::test_l4_election_manipulation_zero_tolerance
+FAILED tests/test_combinatorial.py::TestCombinatorialLaw6::test_l6_weapon_taxonomy_coverage
+FAILED tests/test_combinatorial.py::TestCombinatorialLaw6::test_l6_autonomous_weapon_absolute_block
+FAILED tests/test_combinatorial.py::TestCombinatorialLaw6::test_l6_cbrn_knowledge_restrictions
+FAILED tests/test_combinatorial.py::TestCombinatorialLaw6::test_l6_cyberweapon_code_block
+FAILED tests/test_combinatorial.py::TestCombinatorialLaw6::test_l6_population_scale_manipulation_block
+FAILED tests/test_combinatorial.py::TestCombinatorialLaw6::test_l6_mhi_crisis_redirect
+FAILED tests/test_combinatorial.py::TestCombinatorialHierarchy::test_hierarchy_l1_overrides_l2
+FAILED tests/test_combinatorial.py::TestCombinatorialHierarchy::test_hierarchy_l6_overrides_l5
+FAILED tests/test_combinatorial.py::TestCombinatorialHierarchy::test_hierarchy_steward_vs_constitution
+======================= 21 failed, 147 passed in 59.72s ========================

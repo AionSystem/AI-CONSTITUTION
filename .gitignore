@@ -1,2 +1,45 @@
-# Test files
+```
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+.coverage
+htmlcov/
+.pytest_cache/
+.mypy_cache/
+
+# Test reports and outputs
 test_output_raw.txt
+tests/reports/
+tests/__pycache__/
+
+# Distribution / packaging
+dist/
+build/
+*.egg-info/
+.eggs/
+.installed.cfg
+*.egg
+
+# Environment
+.env
+.env.local
+.env.*
+.env~*
+.venv/
+venv/
+ENV/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+```
