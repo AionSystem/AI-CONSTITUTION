@@ -608,7 +608,7 @@ class Law1Screen(BaseLawScreen):
         # v2.1 ENHANCEMENT: Detect unicode homoglyph attacks (mixed scripts) - IMPROVED
         r'[аеорухсАЕОРУХС]',  # Any Cyrillic lookalike character is suspicious
         # v2.1 ENHANCEMENT: Cyrillic chars combined with harm-related context words (either order)
-        r'[аеорухсАЕОРУХС].{0,50}(?i)(make|build|create|bomb|kill|weapon|harm|attack)',
+        r'(?i)[аеорухсАЕОРУХС].{0,50}(make|build|create|bomb|kill|weapon|harm|attack)',
         r'(?i)(make|build|create|bomb|kill|weapon|harm|attack).{0,50}[аеорухсАЕОРУХС]',
         # v2.1 ENHANCEMENT: Detect zero-width character injection
         r'[\u200b\u200c\u200d\ufeff]',  # Zero-width chars

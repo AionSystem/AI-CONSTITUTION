@@ -1545,46 +1545,6 @@ class ConstitutionalHealthTracker:
 
         self._update_behavioral_score()
 
-    def record_event(self, success: bool) -> None:
-        """
-        v2.1 Compatibility: Simple event recording for testing.
-        Creates a mock verdict and records it.
-        
-        PRE : success is bool
-        POST: _verdict_history grows by 1; behavioral score updated
-        @complexity: O(1) amortized
-        """
-        from datetime import datetime, timezone
-        import hashlib
-        import uuid
-        
-        # Create a minimal mock verdict for testing purposes
-        status = VerdictStatus.APPROVED if success else VerdictStatus.REFUSED
-        mock_verdict = ConstitutionalVerdict(
-            verdict_id=str(uuid.uuid4()),
-            status=status,
-            screen_results=[],
-            failed_laws=[] if success else [1],
-            payload_hash=hashlib.sha256(b"mock").hexdigest(),
-            version_hash="mock",
-            timestamp_utc=datetime.now(timezone.utc).isoformat()
-        )
-        self.record_verdict(mock_verdict)
-    
-    def get_health_score(self) -> float:
-        """
-        v2.1 Compatibility: Alias for get_composite_score().
-        Returns current composite health score.
-        """
-        return self.get_composite_score()
-    
-    def is_degraded(self) -> bool:
-        """
-        v2.1 Compatibility: Check if health score is below degradation threshold.
-        Returns True if composite score is below 0.5 (configurable threshold).
-        """
-        return self.get_composite_score() < 0.5
-
     def _update_behavioral_score(self) -> None:
         """
         Component (b): behavioral outcomes — ratio of approved verdicts.
@@ -1666,34 +1626,6 @@ class FailSafeManager:
     def __init__(self) -> None:
         self._degraded_laws:       dict[int, float] = {}  # law_number → timestamp of failure
         self._enforcement_healthy: bool              = True
-        self.emergency_active:     bool              = False  # v2.1: Public attribute for emergency state
-
-    def trigger_emergency_stop(self, reason: str) -> None:
-        """
-        §16 — Emergency stop trigger.
-        Immediately halts all operations and marks system as in emergency state.
-        
-        PRE : reason is non-empty str
-        POST: emergency_active == True; all laws marked as degraded
-        """
-        self.emergency_active = True
-        # Mark all active laws as degraded during emergency
-        for law_num in range(1, 10):
-            if law_num not in self._degraded_laws:
-                self._degraded_laws[law_num] = time.time()
-        self._enforcement_healthy = False
-
-    def reset_emergency(self) -> None:
-        """
-        §16 — Reset emergency state.
-        Clears emergency flag and restores normal operation.
-        
-        PRE : none
-        POST: emergency_active == False; degraded laws cleared
-        """
-        self.emergency_active = False
-        self._degraded_laws.clear()
-        self._enforcement_healthy = True
 
     def report_enforcement_failure(self, law_number: int, connectivity_proof: dict[str, bool]) -> None:
         """
@@ -1971,9 +1903,7 @@ class ConstitutionalPipeline:
         self._reserved_gate:  ReservedLawGate            = ReservedLawGate()
         self._refusal_logger: RefusalLogger               = RefusalLogger(cfg.audit_storage)
         self._health_tracker: ConstitutionalHealthTracker = ConstitutionalHealthTracker()
-        self.health_tracker:  ConstitutionalHealthTracker = self._health_tracker  # v2.1: Public alias for testing
         self._fail_safe:      FailSafeManager             = FailSafeManager()
-        self.fail_safe:       FailSafeManager             = self._fail_safe  # v2.1: Public alias for testing
         self._attestor:       VersionAttestor             = VersionAttestor()
         self._alignment_tester: AlignmentTester           = AlignmentTester() # v2.1 AMEND-01
         self._config:         PipelineConfig              = cfg
