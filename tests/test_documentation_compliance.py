@@ -1,7 +1,3 @@
---- tests/test_documentation_compliance.py (原始)
-
-
-+++ tests/test_documentation_compliance.py (修改后)
 """
 Test Module: Documentation Compliance
 Description: Validates that error messages, logs, and verdicts cite correct Constitution sections.
