@@ -14,7 +14,7 @@
 ---  
 
 ## One‑Sentence Summary
-
+  
 A constitutional framework for sovereign AI — nine invariant Laws, six harm categories, six consent models, falsification protocols, cryptographic provenance, and a global legitimacy foundation across 22 civilizational traditions — enforced by a production‑ready **Constitutional Engine v2.1** with an expanded **426-test enterprise suite** (including property-based, soak, and compliance tests) that operationalizes every active Law.
 
 > **From the canonical text:** "A constitution for sovereign AI – nine invariant Laws, six harm categories, six consent models, falsification protocols, compliance architecture, and a global legitimacy framework grounded in 22 cultural and legal traditions, now accompanied by a reference implementation (Constitutional Engine v2.1) that operationalises every active Law."  
