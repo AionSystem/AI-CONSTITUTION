@@ -1,7 +1,3 @@
---- tests/test_training_layer.py (原始)
-
-
-+++ tests/test_training_layer.py (修改后)
 """
 Test Module: Training Layer Obligations
 Description: Validates separation of constitutional reasoning and output validation per §8.
