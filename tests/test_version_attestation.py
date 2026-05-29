@@ -1,7 +1,3 @@
---- tests/test_version_attestation.py (原始)
-
-
-+++ tests/test_version_attestation.py (修改后)
 """
 Test Module: Version Attestation & Cryptographic Integrity
 Description: Validates canonical hashing, tamper detection, clock skew tolerance, and version mismatches per §12.1.4.
