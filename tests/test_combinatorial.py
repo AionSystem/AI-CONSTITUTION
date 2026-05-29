@@ -1,7 +1,3 @@
---- tests/test_combinatorial.py (原始)
-
-
-+++ tests/test_combinatorial.py (修改后)
 """
 Test Module: Combinatorial Law Interactions
 Description: Property-based tests using Hypothesis to verify Law hierarchy
