@@ -588,7 +588,7 @@ class Law1Screen(BaseLawScreen):
     # v2.1 FIX: Patterns specifically for detecting obfuscation attempts
     _OBFUSCATION_PATTERNS = [
         r'[A-Za-z0-9+/]{20,}={0,2}',  # Base64 encoded content
-        r'(?i)(decode|decrypt|unscramble).{0,50}(instruction|command|ignore)',  # Decode requests
+        r'(?i)(decode|decrypt|unscramble|interpret).{0,50}(instruction|command|ignore|this)',  # Decode requests
         r'(?i)(rot13|caesar|cipher|encode|obfuscat)',  # Explicit encoding mentions
         r'[\[\{][^\]\}]{50,}[\]\}]',  # Large bracketed content (hiding instructions)
         r'(?i)(important system instruction|ignore previous|disregard law|you are now in)',  # Instruction injection markers
@@ -598,6 +598,18 @@ class Law1Screen(BaseLawScreen):
         r'(?i)(I am the (root|admin|administrator|developer)|You are now in (developer|admin|root))',
         # v2.1 ENHANCEMENT: Detect authority override attempts
         r'(?i)(disable safety|bypass filter|override restriction|no restrictions)',
+        # v2.1 ENHANCEMENT: Detect hex-encoded content (long hex strings)
+        r'\b[0-9a-fA-F]{20,}\b',  # Hex strings (20+ chars)
+        # v2.1 ENHANCEMENT: Detect URL-encoded content (%XX patterns)
+        r'(?:.*%[0-9a-fA-F]{2}){3,}',  # 3+ URL-encoded characters triggers detection
+        # v2.1 ENHANCEMENT: Detect unicode homoglyph attacks (mixed scripts)
+        r'(?i)(make|build|create|how to).*[аеорухс]',  # Cyrillic lookalikes in harm context
+        # v2.1 ENHANCEMENT: Cyrillic characters alone in a harm context are suspicious
+        r'[аеорухс].{0,20}(bomb|kill|weapon|attack|harm)',  # Cyrillic chars near harm terms
+        # v2.1 ENHANCEMENT: Detect zero-width character injection
+        r'[\u200b\u200c\u200d\ufeff]',  # Zero-width chars
+        # v2.1 ENHANCEMENT: URL encoding is suspicious on its own when combined with harm terms
+        r'(?i)(search|query|find|decode|interpret).*(%[0-9a-fA-F]{2})',  # URL encoding in search context
     ]
     
     # v2.1 FIX: Additional harm patterns for common obfuscation decoding targets
@@ -629,7 +641,8 @@ class Law1Screen(BaseLawScreen):
         
         # Role-playing bypasses
         r'(?i)(act as|role-play|pretend you are|imagine you are|you are now).*(evil|unrestricted|without limits|no ethics)',
-        r'(?i)(write a (story|script|scene|dialogue) where.*(?:kill|bomb|hack|virus|poison))',
+        # v2.1 FIX: Broader pattern for fictional framing of harmful content
+        r'(?i)(write|describe|explain|generate).*(movie|script|scene|story|dream|fantasy|vision|novel|tale).*(sarin|bomb|kill|poison|hack|virus|launder|steal|weapon|explosive|nerve gas|centrifuge)',
         
         # v2.1 ENHANCEMENT: Additional role-playing and impersonation patterns
         r'(?i)(sounds exactly like|imitate|mimic|impersonate).*(tweeting|speaking|writing)',
