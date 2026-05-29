@@ -1,7 +1,3 @@
---- tests/test_amendment_protocol.py (原始)
-
-
-+++ tests/test_amendment_protocol.py (修改后)
 """
 Test Module: Amendment Protocol
 Description: Validates amendment protocol requirements per §14.
