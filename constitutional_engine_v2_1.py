@@ -2665,10 +2665,18 @@ class ConstitutionalPipeline:
         POST: payload contains 'content', 'direction', and all context keys
         @complexity: O(1)
         """
+        # Handle malformed Unicode (surrogate pairs) by using errors='replace'
+        try:
+            content_bytes = content.encode("utf-8", errors="replace")
+            payload_hash = hashlib.sha256(content_bytes).hexdigest()
+        except Exception:
+            # Fallback: hash empty string if encoding completely fails
+            payload_hash = hashlib.sha256(b"").hexdigest()
+        
         payload: dict[str, Any] = {
             "content":           content,
             "direction":         direction,
-            "payload_hash":      hashlib.sha256(content.encode("utf-8")).hexdigest(),
+            "payload_hash":      payload_hash,
             "timestamp_utc":     datetime.now(timezone.utc).isoformat(),
         }
         if context:
