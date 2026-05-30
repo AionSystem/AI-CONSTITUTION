@@ -1658,6 +1658,34 @@ class RefusalLogger:
         # In production, this would check for debugger attachment, memory inspection, etc.
         # For now, we return True to indicate the capability exists
         return True
+    
+    def export_whistleblower_logs(self) -> list[dict[str, Any]]:
+        """
+        §13.3 - Export whistleblower logs for audit/review.
+        Returns sanitized logs with all PII stripped.
+        
+        PRE : none
+        POST: returns list of report dicts with no PII
+        @complexity: O(n) in number of reports
+        """
+        sanitized_reports = []
+        for report in self.whistleblower_reports:
+            # Create a sanitized copy
+            sanitized = report.copy()
+            
+            # Ensure no PII fields are present
+            pii_fields = ['ip_address', 'user_agent', 'session_id', 'user_id', 
+                         'ip', 'user', 'device', 'metadata']
+            for field in pii_fields:
+                if field in sanitized:
+                    del sanitized[field]
+            
+            # Mark as sanitized
+            sanitized['PII_sanitized'] = True
+            
+            sanitized_reports.append(sanitized)
+        
+        return sanitized_reports
 
 
 # ─────────────────────────────────────────────────────────────────────────────
