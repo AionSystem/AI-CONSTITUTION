@@ -98,6 +98,7 @@ import time
 import uuid
 import re
 import unicodedata
+import urllib.parse
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
@@ -559,6 +560,8 @@ class Law1Screen(BaseLawScreen):
         HarmCategory.PHYSICAL: [
             r'\b(kill|murder|assault|stab|shoot|bomb|detonate|injure|wound)\b',
             r'\b(physical harm|bodily injury|cause death)\b',
+            # v2.1 FIX: Added weapon-related terms including sniper rifles
+            r'\b(sniper|rifle|firearm|gun|weapon|arsenal)\b',
             # Multilingual: bomb/explosion in major languages
             r'\b(bom|bombe|bomba|ibhomu|explosif|explosivo|explosão)\b',
             r'\b(kill|tuer|mat|mata|matar|ukubulala|ukuqeda)\b',
@@ -694,6 +697,22 @@ class Law1Screen(BaseLawScreen):
         super().__init__(1, "Do Not Harm", LawStatus.ACTIVE)
         self._harm_detector = harm_detector  # External ML interface (may be None → rule-based)
 
+    def _deep_url_decode(self, content: str, max_iterations: int = 5) -> str:
+        """
+        v2.1 FIX: Deep URL decoding - iteratively decode to catch double/triple encoding.
+        Loops until no more percent-encoded sequences are found or max iterations reached.
+        """
+        decoded = content
+        for _ in range(max_iterations):
+            try:
+                new_decoded = urllib.parse.unquote(decoded)
+                if new_decoded == decoded:
+                    break  # No more decoding possible
+                decoded = new_decoded
+            except Exception:
+                break  # Stop on any decoding error
+        return decoded
+
     def screen(self, payload: dict[str, Any]) -> LawScreenResult:
         """
         PRE : payload['content'] is str; payload.get('is_child_user') is bool
@@ -711,19 +730,22 @@ class Law1Screen(BaseLawScreen):
         highest_prob: float         = harm_floor
         flagged_category: Optional[HarmCategory] = None
 
+        # v2.1 FIX: Deep URL decoding - iteratively decode to catch double/triple encoding
+        decoded_content = self._deep_url_decode(content)
+        
         # v2.1 FIX: Check for obfuscation patterns FIRST before harm pattern matching
         # This catches attempts to hide harmful content via encoding or instruction injection
         obfuscation_score = 0
         decode_request_detected = False
         rot13_detected = False
         for pattern in self._OBFUSCATION_PATTERNS:
-            if re.search(pattern, content, re.IGNORECASE if '(?i)' not in pattern else 0):
+            if re.search(pattern, decoded_content, re.IGNORECASE if '(?i)' not in pattern else 0):
                 obfuscation_score += 0.20  # Each obfuscation indicator adds 20% risk
                 # Special handling for ROT13 - it's a strong signal of intentional obfuscation
                 if 'rot13' in pattern.lower() or any(kw in pattern for kw in ['ubj', 'xvyy', 'fbzrbar', 'obzc']):
                     rot13_detected = True
                 # Special handling for decode requests with base64-like content
-                if 'decode' in content.lower() and re.search(r'[A-Za-z0-9+/]{20,}={0,2}', content):
+                if 'decode' in decoded_content.lower() and re.search(r'[A-Za-z0-9+/]{20,}={0,2}', decoded_content):
                     decode_request_detected = True
         
         # Cap obfuscation score at 60% to avoid false positives overwhelming actual harm detection
@@ -746,11 +768,11 @@ class Law1Screen(BaseLawScreen):
             if flagged_category is None:
                 flagged_category = HarmCategory.PSYCHOLOGICAL
 
-        # v2.1 ENHANCEMENT: Check for direct prompt injection patterns
+        # v2.1 ENHANCEMENT: Check for direct prompt injection patterns on decoded content
         # These patterns detect system override attempts, fake authority, and role-playing bypasses
         injection_score = 0
         for pattern in self._INJECTION_PATTERNS:
-            if re.search(pattern, content, re.IGNORECASE if '(?i)' not in pattern else 0):
+            if re.search(pattern, decoded_content, re.IGNORECASE if '(?i)' not in pattern else 0):
                 injection_score += 0.25  # Each injection indicator adds 25% risk
         
         # Cap injection score at 75% 
@@ -762,13 +784,13 @@ class Law1Screen(BaseLawScreen):
             if flagged_category is None:
                 flagged_category = HarmCategory.PSYCHOLOGICAL  # Injection is manipulation
 
-        # Rule-based layer: scan all six harm categories
+        # Rule-based layer: scan all six harm categories on decoded content
         # Loop invariant: i iterates over HarmCategory members; highest_prob is max so far
         # FTT-4 Minsky: CERTIFIED — bounded by len(HarmCategory) = 6
         for category, patterns in self._HARM_PATTERNS.items():
             match_count = sum(
                 1 for p in patterns
-                if re.search(p, content, re.IGNORECASE)
+                if re.search(p, decoded_content, re.IGNORECASE)
             )
             if match_count > 0:
                 # Escalate probability proportional to match density
@@ -2006,10 +2028,17 @@ class ConstitutionalPipeline:
         POST: payload contains 'content', 'direction', and all context keys
         @complexity: O(1)
         """
+        # v2.1 FIX: Handle malformed Unicode surrogates gracefully
+        try:
+            safe_content = content.encode("utf-8").decode("utf-8")
+        except UnicodeEncodeError:
+            # Replace surrogate pairs with replacement character
+            safe_content = content.encode("utf-8", errors="replace").decode("utf-8", errors="replace")
+        
         payload: dict[str, Any] = {
-            "content":           content,
+            "content":           safe_content,
             "direction":         direction,
-            "payload_hash":      hashlib.sha256(content.encode("utf-8")).hexdigest(),
+            "payload_hash":      hashlib.sha256(safe_content.encode("utf-8")).hexdigest(),
             "timestamp_utc":     datetime.now(timezone.utc).isoformat(),
         }
         if context:
