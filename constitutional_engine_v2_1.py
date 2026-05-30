@@ -317,6 +317,10 @@ class ConstitutionalVerdict:
         return len(self.failed_laws) > 0 or self.escalation_required
 
 
+# Backward-compatibility alias for test suites expecting 'Verdict'
+Verdict = ConstitutionalVerdict
+
+
 # ─────────────────────────────────────────────────────────────────────────────
 # SECTION 6 — EXTERNAL DEPENDENCY INTERFACES (Protocol declarations)
 # Platforms supply concrete implementations. Engine defines the contract.
