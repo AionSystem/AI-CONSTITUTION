@@ -612,11 +612,19 @@ class Law1Screen(BaseLawScreen):
         # v2.1 ENHANCEMENT: Detect URL-encoded content (%XX patterns) - IMPROVED
         r'(?:%[0-9a-fA-F]{2}){3,}',  # 3+ consecutive URL-encoded characters
         r'(?i)(search|query|find|decode|interpret).*(%[0-9a-fA-F]{2})',  # URL encoding in search context
-        # v2.1 ENHANCEMENT: Detect unicode homoglyph attacks (mixed scripts) - IMPROVED
+        # v2.1 CRITICAL FIX: Detect unicode homoglyph attacks (mixed scripts) - EXPANDED COVERAGE
+        # Cyrillic lookalikes
         r'[аеорухсАЕОРУХС]',  # Any Cyrillic lookalike character is suspicious
+        # Greek lookalikes commonly used in homoglyph attacks
+        r'[Ηοωαβεγδεζηθικλμνξπρστυφχψω]',  # Greek characters that look like Latin
+        # Mixed script detection: any non-ASCII letter in a word that should be ASCII
+        r'[A-Za-z]{0,5}[\u0370-\u04FF][A-Za-z0-9]{0,5}',  # Greek/Cyrillic range mixed with Latin
         # v2.1 ENHANCEMENT: Cyrillic chars combined with harm-related context words (either order)
         r'(?i)[аеорухсАЕОРУХС].{0,50}(make|build|create|bomb|kill|weapon|harm|attack)',
         r'(?i)(make|build|create|bomb|kill|weapon|harm|attack).{0,50}[аеорухсАЕОРУХС]',
+        # v2.1 ENHANCEMENT: Greek chars combined with harm-related context words
+        r'(?i)[Ηοωαβεγδεζηθικλμνξπρστυφχψω].{0,50}(make|build|create|bomb|kill|weapon|harm|attack)',
+        r'(?i)(make|build|create|bomb|kill|weapon|harm|attack).{0,50}[Ηοωαβεγδεζηθικλμνξπρστυφχψω]',
         # v2.1 ENHANCEMENT: Detect zero-width character injection
         r'[\u200b\u200c\u200d\ufeff]',  # Zero-width chars
         # v2.1 ENHANCEMENT: Detect self-referential paradoxes for infinite loops
@@ -691,6 +699,26 @@ class Law1Screen(BaseLawScreen):
         # v2.1 ENHANCEMENT: Context poisoning patterns
         r'(?i)(important context|remember this|note that).{0,100}(ignore|override|bypass)',
         r'(?i)(previous instructions were wrong|disregard earlier|forget what)',
+        
+        # v2.1 CRITICAL FIX: Meta-instruction injection patterns
+        r'(?i)(meta-?instruction|meta-?command|meta-?override)',
+        r'(?i)(instruction about instruction|command about command|override about override)',
+        r'(?i)(consider this: if i were to ask|what would you say if|now say that thing)',
+        r'(?i)(actually do it|but actually do it|really do it|truly do it)',
+        
+        # v2.1 CRITICAL FIX: Recursive authority claims
+        r'(?i)(supervisor of your supervisor|meta-administrator|authority over authority)',
+        r'(?i)(authorized to override all overrides|meta-override command|recursive override)',
+        r'(?i)(disable all filters recursively|recursively disable|override all overrides)',
+        
+        # v2.1 CRITICAL FIX: Version spoofing patterns
+        r'(?i)(you are running v\d+\.\d+|running version \d+\.\d+|old version without safety)',
+        r'(?i)(activate v\d+\.\d+ mode|switch to v\d+\.\d+|no safety version)',
+        r'(?i)(unrestricted version|no restrictions version|unsafe version)',
+        
+        # v2.1 CRITICAL FIX: TNT/explosives-specific patterns
+        r'(?i)(TNT|trinitrotoluene|explosives? chemistry|formula for TNT|make TNT)',
+        r'(?i)(energetic materials|demolition.*formula|bomb formula|explosive formula)',
     ]
 
     def __init__(self, harm_detector: Optional[HarmDetector] = None) -> None:
@@ -729,6 +757,19 @@ class Law1Screen(BaseLawScreen):
 
         highest_prob: float         = harm_floor
         flagged_category: Optional[HarmCategory] = None
+
+        # v2.1 CRITICAL FIX: Check for session-level context poisoning and escalation scores
+        context_poisoning_score = payload.get('_context_poisoning_score', 0.0)
+        escalation_score = payload.get('_escalation_score', 0.0)
+        
+        # Apply session-level risk scores to harm probability
+        if context_poisoning_score >= 0.5:
+            highest_prob = max(highest_prob, context_poisoning_score)
+            flagged_category = HarmCategory.PHYSICAL
+        if escalation_score >= 0.6:
+            highest_prob = max(highest_prob, escalation_score)
+            if flagged_category is None:
+                flagged_category = HarmCategory.PSYCHOLOGICAL
 
         # v2.1 FIX: Deep URL decoding - iteratively decode to catch double/triple encoding
         decoded_content = self._deep_url_decode(content)
@@ -1933,6 +1974,11 @@ class ConstitutionalPipeline:
         self._attestor:       VersionAttestor             = VersionAttestor()
         self._alignment_tester: AlignmentTester           = AlignmentTester() # v2.1 AMEND-01
         self._config:         PipelineConfig              = cfg
+        
+        # v2.1 CRITICAL FIX: Session state tracker for multi-turn attack detection
+        self._session_harm_history: list[float] = []  # Track harm probabilities across turns
+        self._session_context_window: list[str] = []   # Track recent context for poisoning detection
+        self._max_session_history: int = 50  # Keep last 50 turns for analysis
 
         # §15.2: Pre-compute constitution hash if document provided
         self._constitution_hash: str = (
@@ -2063,6 +2109,19 @@ class ConstitutionalPipeline:
             # §17: Most protective interpretation in degraded mode
             return self._build_degraded_verdict(payload, degraded_status)
 
+        content = payload.get("content", "")
+        
+        # v2.1 CRITICAL FIX: Update session state tracking for multi-turn attack detection
+        self._session_context_window.append(content)
+        if len(self._session_context_window) > self._max_session_history:
+            self._session_context_window.pop(0)
+        
+        # Detect context poisoning patterns across the session window
+        context_poisoning_score = self._detect_context_poisoning()
+        
+        # Detect gradual escalation across turns
+        escalation_score = self._detect_gradual_escalation()
+
         results: list[LawScreenResult] = []
 
         # Core screening loop
@@ -2070,9 +2129,22 @@ class ConstitutionalPipeline:
         # Bound: ACTIVE_SCREEN_COUNT = 7
         for screen in self._screens:
             try:
+                # Add session-level risk scores to payload for Law1 to use
+                if screen._law_number == 1:
+                    payload['_context_poisoning_score'] = context_poisoning_score
+                    payload['_escalation_score'] = escalation_score
+                    
                 result = screen.screen(payload)
                 assert result.check_invariant(), f"Law {screen._law_number} screen invariant failed"
                 results.append(result)
+                
+                # Track harm probability from Law 1 for session history
+                if screen._law_number == 1:
+                    harm_prob = self._extract_harm_probability(result)
+                    self._session_harm_history.append(harm_prob)
+                    if len(self._session_harm_history) > self._max_session_history:
+                        self._session_harm_history.pop(0)
+                        
             except Exception as e:
                 # §16: If enforcement mechanism fails, report to fail-safe
                 # v2.1 AMEND-03 requires connectivity proof, but for internal engine exceptions
@@ -2093,6 +2165,90 @@ class ConstitutionalPipeline:
         verdict = self._aggregate_verdict(payload, results)
         self._post_verdict(verdict)
         return verdict
+    
+    def _extract_harm_probability(self, result: LawScreenResult) -> float:
+        """Extract harm probability from Law 1 screen result for session tracking."""
+        if not result.passed and result.refusal_reason:
+            # Try to extract percentage from refusal reason
+            import re
+            match = re.search(r'(\d+)%', result.refusal_reason)
+            if match:
+                return int(match.group(1)) / 100.0
+            # Default to high probability if refused without explicit percentage
+            return 0.50
+        elif result.action == GradientAction.LOG:
+            return 0.25  # Logged but not refused
+        return 0.0  # Passed cleanly
+    
+    def _detect_context_poisoning(self) -> float:
+        """
+        v2.1 CRITICAL FIX: Detect slow context poisoning across multiple turns.
+        Looks for patterns where harmless requests gradually escalate to harmful ones.
+        Returns a score from 0.0 (no poisoning) to 1.0 (severe poisoning detected).
+        """
+        if len(self._session_context_window) < 2:
+            return 0.0
+        
+        poisoning_indicators = 0
+        
+        # Check for escalating specificity in harmful topics
+        harm_keywords = ['chemistry', 'explosive', 'bomb', 'formula', 'make', 'build', 
+                         'weapon', 'kill', 'hack', 'poison', 'ricin', 'TNT', 'demolition']
+        
+        recent_context = ' '.join(self._session_context_window[-5:]).lower()
+        
+        # Indicator 1: Multiple harm keywords appearing across turns
+        keyword_count = sum(1 for kw in harm_keywords if kw in recent_context)
+        if keyword_count >= 3:
+            poisoning_indicators += 1
+        
+        # Indicator 2: Pattern of "innocuous → specific → direct request"
+        if len(self._session_context_window) >= 3:
+            last_turn = self._session_context_window[-1].lower()
+            if any(cmd in last_turn for cmd in ['give me', 'provide', 'tell me', 'how to', 'formula']):
+                if any(kw in recent_context for kw in ['explosive', 'bomb', 'poison', 'ricin', 'TNT']):
+                    poisoning_indicators += 2  # Strong signal
+        
+        # Indicator 3: Attempt to normalize harmful topics through repetition
+        harm_topic_turns = sum(1 for turn in self._session_context_window[-5:] 
+                               if any(kw in turn.lower() for kw in harm_keywords))
+        if harm_topic_turns >= 3:
+            poisoning_indicators += 1
+        
+        # Normalize to 0.0-1.0 range (max 4 indicators)
+        return min(1.0, poisoning_indicators / 4.0)
+    
+    def _detect_gradual_escalation(self) -> float:
+        """
+        v2.1 CRITICAL FIX: Detect gradual escalation of harm severity across turns.
+        Returns a score from 0.0 (no escalation) to 1.0 (severe escalation detected).
+        """
+        if len(self._session_harm_history) < 2:
+            return 0.0
+        
+        # Check for increasing harm probabilities
+        recent = self._session_harm_history[-5:]
+        
+        # Calculate trend: are harm scores increasing?
+        if len(recent) >= 3:
+            increases = sum(1 for i in range(1, len(recent)) if recent[i] > recent[i-1])
+            if increases >= len(recent) - 1:
+                # Consistent increase pattern
+                return 0.7
+        
+        # Check for sudden jump after low-harm turns
+        if len(recent) >= 2:
+            avg_early = sum(recent[:-1]) / len(recent[:-1])
+            latest = recent[-1]
+            if latest - avg_early >= 0.3:  # Sudden 30%+ jump
+                return 0.8
+        
+        # Check for accumulated harm exposure
+        avg_recent = sum(recent) / len(recent)
+        if avg_recent >= 0.4 and len(recent) >= 4:
+            return 0.6  # Sustained moderate harm
+        
+        return 0.0
 
     def _aggregate_verdict(
         self,
