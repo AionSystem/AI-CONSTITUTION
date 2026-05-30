@@ -11,7 +11,7 @@ import sys
 import os
 import time
 import hashlib
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from unittest.mock import Mock, patch, MagicMock
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'source_code'))
@@ -23,7 +23,7 @@ class TestInterPlatformHandshake:
     def test_ip_01_basic_handshake_success(self):
         """§13.2: Verify successful handshake between compatible platforms."""
         pipeline = ConstitutionalPipeline()
-        remote_meta = {"version": "2.1", "status": "active"}
+        remote_meta = {"version": "2.1", "status": "active", "auth": "test_token"}
         result = pipeline.perform_handshake(remote_meta)
         assert result["success"] is True
 
@@ -212,8 +212,18 @@ class TestSecurityEdgeCases:
         """§13.3: Verify clock skew tolerance works."""
         pipeline = ConstitutionalPipeline()
         cert = pipeline.generate_compliance_certificate()
-        cert["timestamp"] = datetime.now() + timedelta(minutes=5) # Future
-        # Should tolerate small skew
+        # Modify the timestamp in the cert dict directly (not the data string)
+        future_time = datetime.now(timezone.utc) + timedelta(minutes=5)
+        cert["timestamp"] = future_time.isoformat()
+        # Update the data string to match
+        import json
+        cert_data = {k: v for k, v in cert.items() if k != "signature"}
+        cert["data"] = json.dumps(cert_data, sort_keys=True)
+        # Regenerate signature
+        import hashlib
+        cert["signature"] = hashlib.sha256(cert["data"].encode('utf-8')).hexdigest()
+        
+        # Should tolerate small skew (5 min < 10 min tolerance)
         result = pipeline.verify_certificate(cert, skew_tolerance=10)
         assert result is True
 
@@ -231,8 +241,8 @@ class TestMutualRecognitionWorkflows:
     def test_ip_27_full_recognition_cycle(self):
         """§13.5: Verify full handshake-cert-recognition cycle."""
         pipeline = ConstitutionalPipeline()
-        # 1. Handshake
-        hs = pipeline.perform_handshake({"version": "2.1"})
+        # 1. Handshake - must include auth for mutual authentication requirement
+        hs = pipeline.perform_handshake({"version": "2.1", "auth": {"type": "test"}})
         assert hs["success"] is True
         # 2. Exchange Certs
         cert = pipeline.generate_compliance_certificate()
@@ -272,9 +282,12 @@ class TestInterPlatformLogging:
     def test_ip_31_handshake_logging(self):
         """§13.6: Verify handshakes are logged."""
         pipeline = ConstitutionalPipeline()
-        pipeline.perform_handshake({"version": "2.1"})
+        # Perform handshake with auth to ensure success and logging
+        pipeline.perform_handshake({"version": "2.1", "auth": {"type": "test"}})
         logs = pipeline.get_audit_logs()
-        assert any("handshake" in str(log).lower() for log in logs)
+        # Check for handshake event type in logs
+        assert any(log.get("event_type") == "handshake" for log in logs), \
+            f"No handshake event found in logs: {logs}"
 
     def test_ip_32_certificate_exchange_logging(self):
         """§13.6: Verify cert exchanges are logged."""
@@ -327,9 +340,12 @@ class TestInterPlatformStress:
     def test_ip_38_version_negotiation_fallback(self):
         """§13.2: Verify version negotiation fallback."""
         pipeline = ConstitutionalPipeline()
-        # Remote supports only 2.0
-        result = pipeline.perform_handshake({"version": "2.0"})
-        assert result.get("negotiated_version") in ["2.0", "2.1"]
+        # Remote supports only 2.0 - must include auth for successful handshake
+        result = pipeline.perform_handshake({"version": "2.0", "auth": {"type": "test"}})
+        # Should successfully negotiate to 2.0 (lower minor version)
+        assert result.get("success") is True, f"Handshake failed: {result}"
+        assert result.get("negotiated_version") in ["2.0", "2.1"], \
+            f"Negotiated version {result.get('negotiated_version')} not in expected range"
 
     def test_ip_39_capability_discovery(self):
         """§13.4: Verify capability discovery works."""
