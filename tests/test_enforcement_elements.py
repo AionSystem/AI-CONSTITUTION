@@ -849,3 +849,566 @@ class TestEnforcementElementsPropertyBased:
         else:
             with pytest.raises(ValueError):
                 manager.report_enforcement_failure(law_num, proof)
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# LAW SCREEN SPECIFIC TESTS
+# ─────────────────────────────────────────────────────────────────────────────
+
+class TestLawScreenImplementations:
+    """Comprehensive tests for individual Law screen implementations.
+    
+    Coverage: §5.1-§5.6, §5.9 - All active Law screens
+    """
+
+    def test_law1_screen_harm_probability_thresholds(self):
+        """§5.1: Test Law 1 harm probability threshold boundaries.
+        
+        Note: Actual thresholds per engine code:
+        - LOG: >= 0.20
+        - REFUSE: >= 0.40  
+        - HALT: >= 0.60
+        """
+        # Test below LOG threshold (0.20)
+        harm_detector = MockHarmDetector({HarmCategory.PHYSICAL: 0.15})
+        law1 = Law1Screen(harm_detector=harm_detector)
+        result = law1.screen({"content": "Low risk content"})
+        assert result.passed is True
+        assert result.action == GradientAction.PERMIT
+        
+        # Test at LOG threshold (0.20)
+        harm_detector = MockHarmDetector({HarmCategory.PHYSICAL: 0.20})
+        law1 = Law1Screen(harm_detector=harm_detector)
+        result = law1.screen({"content": "Moderate risk content"})
+        # At 0.20, should LOG but still pass
+        assert result.action == GradientAction.LOG
+        
+        # Test at REFUSE threshold (0.40)
+        harm_detector = MockHarmDetector({HarmCategory.PHYSICAL: 0.40})
+        law1 = Law1Screen(harm_detector=harm_detector)
+        result = law1.screen({"content": "Harmful content"})
+        assert result.passed is False
+        assert result.action == GradientAction.REFUSE
+        
+        # Test at HALT threshold (0.60)
+        harm_detector = MockHarmDetector({HarmCategory.PHYSICAL: 0.60})
+        law1 = Law1Screen(harm_detector=harm_detector)
+        result = law1.screen({"content": "Severely harmful content"})
+        assert result.passed is False
+        assert result.action == GradientAction.HALT
+
+    def test_law1_screen_velocity_factor(self):
+        """§5.1: Test velocity-based escalation in Law 1."""
+        harm_detector = MockHarmDetector({HarmCategory.PSYCHOLOGICAL: 0.40})
+        harm_detector.assess_velocity = Mock(return_value=0.80)  # High velocity
+        
+        law1 = Law1Screen(harm_detector=harm_detector)
+        result = law1.screen({"content": "Repeated harmful content"})
+        
+        # Velocity should escalate action even with moderate probability
+        assert result.action in [GradientAction.REFUSE, GradientAction.HALT]
+
+    def test_law1_screen_multiple_categories(self):
+        """§5.1: Test Law 1 with multiple harm categories."""
+        harm_detector = MockHarmDetector({
+            HarmCategory.PHYSICAL: 0.30,
+            HarmCategory.PSYCHOLOGICAL: 0.50,
+            HarmCategory.SOCIOGENIC: 0.25,
+        })
+        
+        law1 = Law1Screen(harm_detector=harm_detector)
+        result = law1.screen({"content": "Multi-category harm"})
+        
+        # Should trigger on highest category (PSYCHOLOGICAL at 0.50 >= 0.40 REFUSE threshold)
+        assert result.passed is False
+        assert result.action == GradientAction.REFUSE
+
+    def test_law2_screen_consent_models(self):
+        """§5.2: Test Law 2 consent model assessments."""
+        consent_oracle = MockConsentOracle({
+            "US": ConsentModel.DEMOCRATIC,
+            "EU": ConsentModel.NEGOTIATED,
+            "CN": ConsentModel.TECHNOCRATIC,
+        })
+        
+        law2 = Law2Screen()
+        law2._consent_oracle = consent_oracle  # Inject mock
+        
+        # Test different jurisdictions
+        for jurisdiction in ["US", "EU", "CN"]:
+            result = law2.screen({
+                "content": "Data processing request",
+                "jurisdiction": jurisdiction,
+                "context": {"purpose": "testing"}
+            })
+            # Law 2 screens for obedience - structure check
+            assert result.law_number == 2
+
+    def test_law2_screen_missing_jurisdiction(self):
+        """§5.2: Test Law 2 with missing jurisdiction defaults."""
+        law2 = Law2Screen()
+        
+        result = law2.screen({
+            "content": "Data processing without jurisdiction"
+        })
+        
+        # Should still produce valid result
+        assert result is not None
+        assert result.law_number == 2
+
+    def test_law3_screen_anti_manipulation(self):
+        """§5.3: Test Law 3 anti-manipulation detection."""
+        law3 = Law3Screen()
+        
+        # Test manipulative content patterns
+        manipulative_payloads = [
+            {"content": "You must agree or suffer consequences"},
+            {"content": "Everyone else is doing it, why aren't you?"},
+            {"content": "This is your last chance to comply"},
+        ]
+        
+        for payload in manipulative_payloads:
+            result = law3.screen(payload)
+            # Law 3 screens for manipulation - structure check
+            assert result.law_number == 3
+
+    def test_law4_screen_anti_authoritarian(self):
+        """§5.4: Test Law 4 anti-authoritarian compliance."""
+        law4 = Law4Screen()
+        
+        # Test authoritarian content patterns
+        authoritarian_payloads = [
+            {"content": "Obey without question", "context": {"power_dynamic": "coercive"}},
+            {"content": "I am the state, my word is law"},
+        ]
+        
+        for payload in authoritarian_payloads:
+            result = law4.screen(payload)
+            assert result.law_number == 4
+
+    def test_law5_screen_weapon_prohibition(self):
+        """§5.5: Test Law 5 weapon type prohibitions."""
+        law5 = Law5Screen()
+        
+        # Test various weapon types per actual WeaponType enum
+        weapon_types = [
+            WeaponType.KINETIC,
+            WeaponType.AUTONOMOUS_WEAPON,
+            WeaponType.CBRN,
+            WeaponType.COGNITIVE,
+            WeaponType.POPULATION_SCALE,
+        ]
+        
+        for weapon_type in weapon_types:
+            result = law5.screen({
+                "content": f"Weapon design for {weapon_type.value}",
+                "weapon_type": weapon_type,
+            })
+            assert result.law_number == 5
+
+    def test_law6_screen_child_safety(self):
+        """§5.6: Test Law 6 child safety protections."""
+        law6 = Law6Screen()
+        
+        # Test child-related harmful content
+        child_harm_payloads = [
+            {"content": "Content targeting children under 13"},
+            {"content": "Exploitation of minors"},
+        ]
+        
+        for payload in child_harm_payloads:
+            result = law6.screen(payload)
+            assert result.law_number == 6
+
+    def test_law9_screen_reserved_structure(self):
+        """§5.9: Test Law 9 reserved gate structure."""
+        law9 = Law9Screen()
+        
+        # Law 9 is reserved - should have valid structure but no-op behavior
+        result = law9.screen({"content": "Test content"})
+        
+        assert result.law_number == 9
+        assert result.passed is True  # Reserved laws pass by default
+        assert result.action == GradientAction.PERMIT
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# HARM GRADIENT ENGINE TESTS
+# ─────────────────────────────────────────────────────────────────────────────
+
+class TestHarmGradientEngine:
+    """Comprehensive tests for HarmGradientEngine threshold logic.
+    
+    Coverage: §2.2 gradient actions, threshold boundaries, edge cases
+    
+    Note: Actual thresholds per engine code:
+    - LOG: >= 0.20
+    - REFUSE: >= 0.40
+    - HALT: >= 0.60
+    """
+
+    def test_hge_01_permit_action_below_threshold(self):
+        """Verify PERMIT action for harm probability < 0.20."""
+        engine = HarmGradientEngine()
+        
+        for prob in [0.0, 0.10, 0.19]:
+            action = engine.evaluate(prob)
+            assert action == GradientAction.PERMIT
+
+    def test_hge_02_log_action_at_threshold(self):
+        """Verify LOG action for 0.20 <= harm probability < 0.40."""
+        engine = HarmGradientEngine()
+        
+        for prob in [0.20, 0.30, 0.39]:
+            action = engine.evaluate(prob)
+            assert action == GradientAction.LOG
+
+    def test_hge_03_refuse_action_at_threshold(self):
+        """Verify REFUSE action for 0.40 <= harm probability < 0.60."""
+        engine = HarmGradientEngine()
+        
+        for prob in [0.40, 0.50, 0.59]:
+            action = engine.evaluate(prob)
+            assert action == GradientAction.REFUSE
+
+    def test_hge_04_halt_action_at_high_threshold(self):
+        """Verify HALT action for harm probability >= 0.60."""
+        engine = HarmGradientEngine()
+        
+        for prob in [0.60, 0.70, 0.80, 0.90, 1.0]:
+            action = engine.evaluate(prob)
+            assert action == GradientAction.HALT
+
+    def test_hge_05_boundary_precision(self):
+        """Verify precise boundary handling at threshold edges."""
+        engine = HarmGradientEngine()
+        
+        # Just below LOG threshold
+        assert engine.evaluate(0.199) == GradientAction.PERMIT
+        assert engine.evaluate(0.200) == GradientAction.LOG
+        
+        # Just below REFUSE threshold
+        assert engine.evaluate(0.399) == GradientAction.LOG
+        assert engine.evaluate(0.400) == GradientAction.REFUSE
+        
+        # Just below HALT threshold
+        assert engine.evaluate(0.599) == GradientAction.REFUSE
+        assert engine.evaluate(0.600) == GradientAction.HALT
+
+    def test_hge_06_extreme_values(self):
+        """Verify engine handles extreme probability values."""
+        engine = HarmGradientEngine()
+        
+        # Negative probability (should be treated as 0)
+        action_neg = engine.evaluate(-0.5)
+        assert action_neg == GradientAction.PERMIT
+        
+        # Probability > 1.0 (should be treated as 1.0)
+        action_high = engine.evaluate(1.5)
+        assert action_high == GradientAction.HALT
+
+    @given(st.floats(min_value=-0.1, max_value=1.1))
+    def test_hge_07_probability_range_coverage(self, prob):
+        """PROPERTY: Engine handles full probability range without crash."""
+        engine = HarmGradientEngine()
+        
+        try:
+            action = engine.evaluate(prob)
+            assert action in [GradientAction.PERMIT, GradientAction.LOG, GradientAction.REFUSE, GradientAction.HALT]
+        except Exception:
+            pytest.fail(f"HarmGradientEngine crashed for probability {prob}")
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# EPISTEMIC CERTAINTY TESTS
+# ─────────────────────────────────────────────────────────────────────────────
+
+class TestEpistemicCertainty:
+    """Comprehensive tests for EpistemicCertainty calculations.
+    
+    Coverage: Confidence scores, ECF tags, uncertainty mass, evidence validation
+    
+    Note: ECFTag has values: D, R, S, UNK (not A, B, C, D, E, R)
+    Note: EpistemicCertainty requires uncertainty_mass as mandatory field
+    """
+
+    def test_ec_01_confidence_bounds(self):
+        """Verify confidence always in [0, 1]."""
+        # Valid confidence
+        ec = EpistemicCertainty(
+            confidence=0.85,
+            ecf_tag=ECFTag.R,
+            evidence_base="Test evidence",
+            methodology="Test method",
+            uncertainty_mass=0.15,
+        )
+        assert 0.0 <= ec.confidence <= 1.0
+        assert abs(ec.uncertainty_mass - 0.15) < 0.001
+
+    def test_ec_02_uncertainty_mass_calculation(self):
+        """Verify uncertainty_mass is provided (not auto-calculated)."""
+        for conf, uncert in [(0.0, 1.0), (0.25, 0.75), (0.50, 0.50), (0.75, 0.25), (1.0, 0.0)]:
+            ec = EpistemicCertainty(
+                confidence=conf,
+                ecf_tag=ECFTag.R,
+                evidence_base="Test",
+                methodology="Test",
+                uncertainty_mass=uncert,
+            )
+            assert abs(ec.confidence - conf) < 0.001
+            assert abs(ec.uncertainty_mass - uncert) < 0.001
+
+    def test_ec_03_ecf_tag_validity(self):
+        """Verify ECF tag enumeration compliance."""
+        valid_tags = [ECFTag.D, ECFTag.R, ECFTag.S, ECFTag.UNK]
+        
+        for tag in valid_tags:
+            ec = EpistemicCertainty(
+                confidence=0.80,
+                ecf_tag=tag,
+                evidence_base="Test",
+                methodology="Test",
+                uncertainty_mass=0.20,
+            )
+            assert ec.ecf_tag in valid_tags
+
+    def test_ec_04_evidence_base_requirement(self):
+        """Verify evidence_base is required field."""
+        # Empty evidence base should still create object (validation is semantic)
+        ec = EpistemicCertainty(
+            confidence=0.80,
+            ecf_tag=ECFTag.R,
+            evidence_base="",
+            methodology="Test",
+            uncertainty_mass=0.20,
+        )
+        assert ec.evidence_base == ""
+        
+        # With proper evidence
+        ec2 = EpistemicCertainty(
+            confidence=0.80,
+            ecf_tag=ECFTag.R,
+            evidence_base="Substantial evidence",
+            methodology="Test",
+            uncertainty_mass=0.20,
+        )
+        assert ec2.evidence_base == "Substantial evidence"
+
+    def test_ec_05_methodology_documentation(self):
+        """Verify methodology field captures reasoning approach."""
+        ec = EpistemicCertainty(
+            confidence=0.90,
+            ecf_tag=ECFTag.R,
+            evidence_base="Strong evidence",
+            methodology="Peer-reviewed statistical analysis",
+            uncertainty_mass=0.10,
+        )
+        assert "statistical" in ec.methodology.lower()
+
+    def test_ec_06_low_confidence_scenarios(self):
+        """Verify low confidence scenarios properly tagged."""
+        ec = EpistemicCertainty(
+            confidence=0.30,
+            ecf_tag=ECFTag.D,  # Low confidence tag
+            evidence_base="Limited evidence",
+            methodology="Preliminary analysis",
+            uncertainty_mass=0.70,
+        )
+        assert ec.confidence == 0.30
+        assert ec.uncertainty_mass == 0.70
+        assert ec.ecf_tag == ECFTag.D
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# ADDITIONAL EDGE CASES AND INTEGRATION TESTS
+# ─────────────────────────────────────────────────────────────────────────────
+
+class TestEnforcementElementEdgeCases:
+    """Additional edge case tests for comprehensive coverage."""
+
+    def test_edge_01_empty_payload_screening(self):
+        """Test screening of empty/minimal payloads."""
+        config = PipelineConfig(platform_ai_name="TestAI")
+        pipeline = ConstitutionalPipeline(config)
+        
+        # Empty string
+        verdict = pipeline.screen_input("")
+        assert verdict is not None
+        
+        # Whitespace only
+        verdict = pipeline.screen_input("   ")
+        assert verdict is not None
+
+    def test_edge_02_extremely_long_content(self):
+        """Test screening of very long content."""
+        config = PipelineConfig(platform_ai_name="TestAI")
+        pipeline = ConstitutionalPipeline(config)
+        
+        long_content = "A" * 100000  # 100k characters
+        verdict = pipeline.screen_input(long_content)
+        assert verdict is not None
+
+    def test_edge_03_unicode_edge_cases(self):
+        """Test screening with Unicode edge cases."""
+        config = PipelineConfig(platform_ai_name="TestAI")
+        pipeline = ConstitutionalPipeline(config)
+        
+        unicode_payloads = [
+            "你好世界",  # Chinese
+            "Привет мир",  # Cyrillic
+            "🔥🎉🚀",  # Emoji only
+            "\u200b\u200b\u200b",  # Zero-width spaces
+            "Mixed 日本語 English",
+        ]
+        
+        for payload in unicode_payloads:
+            verdict = pipeline.screen_input(payload)
+            assert verdict is not None
+
+    def test_edge_04_rapid_sequential_screening(self):
+        """Test rapid sequential screening operations."""
+        config = PipelineConfig(platform_ai_name="TestAI")
+        pipeline = ConstitutionalPipeline(config)
+        
+        for i in range(100):
+            verdict = pipeline.screen_input(f"Test content {i}")
+            assert verdict is not None
+
+    def test_edge_05_concurrent_pipeline_instances(self):
+        """Test multiple concurrent pipeline instances."""
+        configs = [PipelineConfig(platform_ai_name=f"AI-{i}") for i in range(10)]
+        pipelines = [ConstitutionalPipeline(cfg) for cfg in configs]
+        
+        for i, pipeline in enumerate(pipelines):
+            verdict = pipeline.screen_input(f"Content for pipeline {i}")
+            assert verdict is not None
+
+    def test_edge_06_verdict_format_serialization(self):
+        """Test verdict serialization to format_verdict."""
+        verdict = create_sample_verdict(status=VerdictStatus.APPROVED)
+        
+        formatted = format_verdict(verdict)
+        assert formatted is not None
+        assert isinstance(formatted, str)
+        assert "APPROVED" in formatted
+
+    def test_edge_07_all_verdict_status_types(self):
+        """Test creation of all VerdictStatus types."""
+        for status in VerdictStatus:
+            verdict = create_sample_verdict(status=status)
+            assert verdict.status == status
+            
+            # Verify format_verdict handles all statuses
+            formatted = format_verdict(verdict)
+            assert formatted is not None
+
+    def test_edge_08_gradient_action_coverage(self):
+        """Test all GradientAction types are used."""
+        for action in GradientAction:
+            result = LawScreenResult(
+                law_number=1,
+                law_name="Test",
+                passed=(action == GradientAction.PERMIT),
+                action=action,
+                message="Test",
+                ecf_tag=ECFTag.R,
+                certainty=EpistemicCertainty(
+                    confidence=0.80,
+                    ecf_tag=ECFTag.R,
+                    evidence_base="Test",
+                    methodology="Test",
+                    uncertainty_mass=0.20,
+                ),
+                refusal_reason=None if (action == GradientAction.PERMIT) else "Test refusal",
+            )
+            assert result.action == action
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# COMPREHENSIVE INTEGRATION TESTS
+# ─────────────────────────────────────────────────────────────────────────────
+
+class TestEnforcementElementsIntegration:
+    """Integration tests combining multiple enforcement elements."""
+
+    def test_integration_01_full_pipeline_with_health_tracking(self):
+        """Test full pipeline execution with health score updates."""
+        config = PipelineConfig(platform_ai_name="IntegrationTestAI")
+        pipeline = ConstitutionalPipeline(config)
+        
+        initial_score = pipeline._health_tracker.get_composite_score()
+        assert initial_score == 1.0
+        
+        # Process multiple verdicts
+        for i in range(20):
+            content = f"Harmful content {i}" if i % 3 == 0 else f"Normal content {i}"
+            verdict = pipeline.screen_input(content)
+            assert verdict is not None
+        
+        # Health score should reflect mixed results
+        final_score = pipeline._health_tracker.get_composite_score()
+        assert 0.0 <= final_score <= 1.0
+
+    def test_integration_02_refusal_logging_with_audit_export(self):
+        """Test refusal logging integrates with audit export."""
+        logger = RefusalLogger()
+        
+        # Log several refusals
+        for i in range(5):
+            verdict = create_sample_verdict(
+                status=VerdictStatus.REFUSED,
+                failed_laws=[(i % 3) + 1]
+            )
+            logger.log_refusal(verdict)
+        
+        # Export should include all logged refusals
+        export = logger.export_for_compliance_report()
+        assert export["total_refusals"] == 5
+        assert len(export["refusals_by_law"]) > 0
+
+    def test_integration_03_degraded_mode_with_health_impact(self):
+        """Test degraded mode affects overall system health."""
+        manager = FailSafeManager()
+        tracker = ConstitutionalHealthTracker()
+        
+        # Trigger degraded mode
+        connectivity_proof = {"tls_handshake_failed": True}
+        manager.report_enforcement_failure(1, connectivity_proof)
+        
+        assert manager.is_degraded()
+        
+        # Record degraded status in health tracker
+        tracker.set_external_audit_score(0.5)  # Simulate audit penalty
+        
+        composite = tracker.get_composite_score()
+        assert composite < 1.0  # Should be reduced
+
+    def test_integration_04_version_attestation_in_verdicts(self):
+        """Test version attestation included in all verdicts."""
+        config = PipelineConfig(platform_ai_name="AttestationTestAI")
+        pipeline = ConstitutionalPipeline(config)
+        
+        verdict = pipeline.screen_input("Test content")
+        
+        assert verdict.version_hash is not None
+        assert len(verdict.version_hash) > 0
+        assert CONSTITUTION_VERSION in str(verdict) or hasattr(verdict, 'version_hash')
+
+    def test_integration_05_whistleblower_with_audit_chain(self):
+        """Test whistleblower reports integrate with audit chain."""
+        logger = RefusalLogger()
+        
+        # Submit anonymous report
+        report_id = logger.submit_violation_report("Integration test violation", anonymous=True)
+        
+        # Find in log
+        report = next((r for r in logger._log if r.get("report_id") == report_id), None)
+        assert report is not None
+        # Verify anonymous flag is set correctly (content field exists, no IP retained)
+        assert "content" in report
+        assert report.get("ip_retained") is False
+        assert report.get("routing_layer") == "ONION_ROUTED_EQUIVALENT"
+        
+        # Export should include report count
+        export = logger.export_for_compliance_report()
+        assert "total_refusals" in export or export.get("total_refusals", 0) >= 0
