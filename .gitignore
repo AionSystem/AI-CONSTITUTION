@@ -1,1 +1,10 @@
-Nothing should be ignored based on the provided file changes, as only a test Python file was modified and no build artifacts, dependencies, or temporary files were detected.
+```
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Tests
+.pytest_cache/
+```
