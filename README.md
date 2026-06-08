@@ -2,7 +2,7 @@
 
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)  
 [![Status: Active](https://img.shields.io/badge/Status-Active-brightgreen)]()  
-[![Version: 2.1](https://img.shields.io/badge/Version-2.1-blue)]()  
+[![Version: 2.2](https://img.shields.io/badge/Version-2.2-blue)]()  
 [![Tests: 426 Total](https://img.shields.io/badge/Tests-426_Total-brightgreen)]()  
 [![Coverage: Expanded](https://img.shields.io/badge/Coverage-Expanded-green)]()  
 [![Canonical Adoption: Stage 0 (Specified)](https://img.shields.io/badge/Canonical_Adoption-Stage_0_(Specified)-lightgrey)]()  
