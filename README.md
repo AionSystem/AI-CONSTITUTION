@@ -1,6 +1,7 @@
 # AI‑CONSTITUTION — The Sovereignty Stack
 
-[![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)  
+[![License: CC BY-ND 4.0](https://img.shields.io/badge/License-CC BY-ND 4.0-blue.svg)](https://opensource.org/licenses/CC BY-ND 4.0)  
+[![License: AGPL v3.0](https://img.shields.io/badge/License-AGPL v3.0-blue.svg)](https://opensource.org/licenses/AGPL v3.0) 
 [![Status: Active](https://img.shields.io/badge/Status-Active-brightgreen)]()  
 [![Version: 2.2](https://img.shields.io/badge/Version-2.2-blue)]()  
 [![Tests: 426 Total](https://img.shields.io/badge/Tests-426_Total-brightgreen)]()  
