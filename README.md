@@ -368,16 +368,32 @@ Automatic Attestation: Engine computes and records canonical hash on every verdi
 To verify the canonical hash of the current constitution:
 
 # Compute hash of the canonical constitution file
-sha256sum "versions/THE CONSTITUTION v2.1.md"
+sha256sum "versions/THE CONSTITUTION v2.2.md"
 
 🤝 Governance, Contributions, and Contact
 License
-Apache 2.0 — Reuse and modification permitted with attribution.
+## ⚖️ Licensing & Commercial Use
+
+This repository contains two distinct components with separate licensing to protect both the open dissemination of the specification and the commercial viability of the runtime engine.
+
+1. **The Specification** (`.md` files): Licensed under [CC BY-ND 4.0](LICENSE_SPEC.md). 
+   You may read, cite, timestamp, and share this document, but you may not create derivative works (forked constitutions) or use it for commercial purposes without explicit written permission from the Architect.
+
+2. **The Constitutional Engine** (`.py` files): Licensed under the [GNU AGPL v3.0](LICENSE_ENGINE.md). 
+   If you use this engine to provide a service over a network, you are legally required to open-source your entire application stack under the same license. 
+
+### 🏢 Enterprise / Commercial Licensing
+If you are a platform, enterprise, or organization that wishes to integrate the Constitutional Engine v2.2 into a proprietary, closed-source, or commercial product without triggering AGPL copyleft obligations, a commercial dual-license is available. 
+
+For commercial licensing inquiries, audit integration, or steward certification, contact: **aionsystem@outlook.com**
+
+
 Contribution Guidelines
 Constitutional Amendments: Open issues with label [PROPOSAL] including rationale and falsification criteria
 Engine Improvements: PRs with label [ENGINE] including new tests
 Test Enhancements: PRs with label [TESTS] improving coverage or reproducibility
 Adoption Declarations: PRs adding to ADOPTIONS.md (planned) with compliance evidence
+
 Specifying Authority
 Sheldon K. Salmon
 AI Reliability Architect · AI Certainty Engineer · AGI Architect
