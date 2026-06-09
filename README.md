@@ -49,15 +49,17 @@ constitutional-engine/
 │   ├── THE CONSTITUTION v1.3.md       # Historical version
 │   ├── THE CONSTITUTION v1.4.md       # Historical version
 │   ├── THE CONSTITUTION v2.0.md       # Major release with supremacy clauses
-│   └── THE CONSTITUTION v2.1.md       # Current canonical version ⭐
-│
+│   └── THE CONSTITUTION v2.1.md       # Major release with supremacy clauses
+│   └── THE CONSTITUTION_v2.2_SEALED.md       # Current canonical version ⭐
+
 ├── commentary/                        # Constitutional Commentary
 │   └── THE CONSTITUTIONAL COMMENTARY v1.1.md  # Global legitimacy foundations
 │
 ├── source_code/                       # Reference Implementations
 │   ├── constitutional_engine_v1_0.py  # Legacy engine (v1.0)
-│   └── constitutional_engine_v2_1.py  # Current engine (v2.1) ⭐
-│
+│   └── constitutional_engine_v2_1.py  # pervious engine (v2.1) 
+│   └── constitutional_engine_v2.2.py  # Current engine (v2.2) ⭐
+
 ├── tests/                             # Test Suite (426 Tests)
 │   ├── __init__.py                    # Pytest configuration
 │   ├── conftest.py                    # Fixtures and mocks
