@@ -1,6 +1,6 @@
 # Creative Commons Attribution-NoDerivatives 4.0 International
 
-**SCOPE OF APPLICATION:** This license applies exclusively to all `.md` documentation files in this repository, including `THE_CONSTITUTION_v2_2_SEALED.md` and `PROTOCOL-v3_2.md`. You may read, cite, and share this document, but you may not create derivative works or use it for commercial purposes without explicit written permission from the Architect (Sheldon K. Salmon).
+**SCOPE OF APPLICATION:** This license applies exclusively to all `.md` documentation files in this repository, including `THE_CONSTITUTION_v2.2_SEALED.md`. You may read, cite, and share this document, but you may not create derivative works or use it for commercial purposes without explicit written permission from the Architect (Sheldon K. Salmon).
 
 ---
 
