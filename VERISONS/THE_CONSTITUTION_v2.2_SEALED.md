@@ -10,7 +10,6 @@
 | **Canonical Hash** | `127d5fb05307c04978bc04691ed930205a1bcb677d0502ca562b65acfeae11ed` |
 | **Hash Algorithm** | SHA-256 · §15.5 canonical normalization (BOM stripped · LF · NFC · UTF-8 no BOM) |
 | **prev\_hash** | `placeholder — v2.1 canonical hash` |
-| **Offical-Repo & Source code** |https://github.com/AionSystem/AI-CONSTITUTION
 | **Status** | `RELEASED · SEALED · ACTIVE` |
 | **Governance Instruments** | PDE v0.5 · SAR v0.2 · QAE v1.4 · FSVE v4.3 · STP v2.0 |
 | **Date** | June 8, 2026 |
