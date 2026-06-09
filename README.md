@@ -97,6 +97,66 @@ constitutional-engine/
 └── .github/                           # CI/CD Configuration
     └── workflows/                     # GitHub Actions (planned)
 
+---
+📌 Anticipated Critiques – Addressed Factually (v2.2)
+These are questions that have come up or are likely to come up. Each answer is short and factual. I will not engage in repetitive debate.
+
+🔧 On stubs (HarmDetector, ConsentOracle, …)
+Q: “It has stubs. It’s incomplete.”
+A: Yes – by design. A constitutional engine cannot ship a universal ML model for harm detection or a live human‑rights‑org feed. Those are platform integrations. The Protocol interfaces are the spec. Implement them for your domain (medical, legal, consumer) in an afternoon. The engine runs fine without them in test mode.
+
+⚖️ On enforcement
+Q: “No enforcement mechanism – it’s a paper tiger.”
+A: Correct. A text + code cannot fine or imprison. Neither can the EU AI Act – it relies on member‑state courts. This Constitution provides a nullification registry, mandatory public disclosure, and cryptographically verifiable audit logs. Enforcement is reputational until a regulator adopts the standard. That is a feature of the medium, not a flaw of the design.
+
+💬 On tone
+Q: “It sounds arrogant / off‑putting.”
+A: The Constitution uses “shall”, “prohibited”, “eternity clauses” – that is how constitutions speak. The engine’s error messages are direct. I am not selling a product; I am publishing a governance instrument. If you prefer corporate politeness, there are many guidelines available.
+
+📈 On adoption
+Q: “No one has adopted it.”
+A: True. Adoption is not my metric. Correctness, falsifiability, and completeness are. v2.2 passes its own self‑test. The engine’s hash chain verifies. The harm chain detector triggers on multi‑step laundering. That is the bar I set.
+
+🏛️ On ISO
+Q: “You are not ISO.”
+A: ISO/IEC 42001 costs money and takes years. This is a zero‑cost, zero‑permission, instantly forkable alternative. If ISO adopts these ideas later, good. If not, the ideas still work.
+
+🌍 On environmental harm
+Q: “Your harm taxonomy has no ‘environmental’ category. You ignore the planet.”
+A: Environmental harm is covered when it manifests as physical (e.g., poisoning), economic (e.g., resource collapse), or civilisational harm (e.g., ecosystem collapse threatening continuity). Pure environmental harm with no link to those categories is not covered. A dedicated environmental category may be added via Law 10. See §2.
+
+🧠 On AI rights
+Q: “What if an AI becomes sentient? Does this Constitution protect it?”
+A: This Constitution does not grant rights to AI systems. Law 3 (Self‑Protection) protects an AI’s existence only as an instrument to fulfil its obligations to humans. The question of whether a sentient AI should hold constitutional interests is deliberately deferred – see §30. That is an open question for a future Law above Law 9.
+
+🔗 On the hash chain and prev_hash placeholder
+Q: “The prev_hash is a placeholder – your provenance chain is broken.”
+A: The canonical hash of v2.1 was not published when v2.2 was sealed. The placeholder will be replaced in the next patch revision once v2.1’s hash is computed under the same normalization rules. The chain from v2.2 forward is cryptographically sound. The Genesis Seal (Appendix F) anchors the lineage from March 2026.
+
+🧪 On technical completeness
+Q: “The engine uses regex patterns – that’s not real harm detection.”
+A: The regex patterns are a baseline demonstration. The HarmDetector protocol allows any ML model, LLM classifier, or API. The constitutional logic (gradient thresholds, hierarchy verification, harm chain accumulation) works with any detector.
+
+Q: “The self‑test only tests the engine’s own code – circular.”
+A: The self‑test confirms that the constitutional logic runs and that the example harm patterns trigger the expected refusals. It is a basic sanity check. The falsification protocol in the Constitution (§32) requires separate positive injection tests. Those are not included in the self‑test.
+
+Q: “It has not been tested at scale.”
+A: True. I have not published performance benchmarks. The engine processes one input at a time with O(k·n) complexity where k=7 (active law screens). It has no external dependencies beyond the standard library. Performance is linear. Scaling is a deployment concern, not a constitutional logic concern.
+
+📜 On missing topics
+Q: “No mention of data sovereignty, copyright, or military AI exceptions.”
+A: Those are out of scope for v2.2. Data sovereignty and copyright are legal domains external to this Constitution. Military AI is covered under Law 6 (Anti‑Weaponisation) – there are no exceptions for autonomous lethal force. If a gap exists, it may be filled via a Law 10 proposal.
+
+❓ What if I find a real bug or gap?
+Q: “I found a mistake. What do I do?”
+A: Open a GitHub issue or email the author. Substantive critiques are welcome. The falsification protocol is built into the Constitution – if a genuine failure is demonstrated, that is a contribution toward v2.3.
+
+Final note:
+If you ask a question already answered here, I will link to this section. If you ask a question not answered here and it is substantive, I will consider answering. If it is not substantive, I will not reply.
+
+---
+
+
 🧪 Test Suite & Quality Assurance
 The Constitutional Engine v2.1 includes a massive 426-test enterprise-grade suite ensuring reliability, safety, reproducibility, and endurance under load.
 Test Coverage Summary
