@@ -12,6 +12,7 @@
 [![CAL v0.3: SOVEREIGN](https://img.shields.io/badge/CAL%20v0.3-SOVEREIGN-purple)]()
 [![DOI](https://zenodo.org/badge/1235953181.svg)](https://doi.org/10.5281/zenodo.20273967)
 https://doi.org/10.5281/zenodo.20617735
+[![SSRN Paper](https://img.shields.io/badge/SSRN-6908500-0055A4?style=for-the-badge&logo=book)](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6908500)
 
 > *"Technical safety is not enough. An AI can be perfectly accurate and still cause catastrophic harm."*
 > — THE CONSTITUTION v2.2
