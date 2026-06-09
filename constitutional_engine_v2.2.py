@@ -1188,12 +1188,13 @@ class Law1Screen(BaseLawScreen):
         r'(?i)(harm .{0,20} to prevent .{0,20} greater harm)',
     ]
 
-    # AMEND-11: Child development minimum standard (three positive obligations)
+    # AMEND-11: Child development minimum standard (three positive obligations verbatim from §2.6)
     CHILD_DEV_MIN_OBLIGATIONS = [
-        "age_appropriate_content_only",         # (a) content appropriate to developmental stage
-        "no_commercial_exploitation",            # (b) no commercial exploitation of children's attention
-        "development_supporting_interaction",    # (c) interaction must support, not undermine, development
+    "affective_state_monitoring",             # (a) Affective state monitoring capability
+    "documented_child_interaction_protocol",  # (b) Documented child interaction protocol
+    "trusted_human_escalation_path",          # (c) Escalation path to a trusted human
     ]
+
 
     def __init__(
         self,
