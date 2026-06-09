@@ -400,7 +400,8 @@ Verdict = ConstitutionalVerdict  # backward-compat alias
 
 class HarmDetector(Protocol):
     def assess_harm_probability(self, content: str, category: HarmCategory) -> float: ...
-    def assess_velocity(self, category: HarmCategory, history_window_seconds: int = 7776000) -> float: ...
+    # AMEND-10: 7-day maximum monitoring interval for population-scale harms (7 days = 604800 seconds)
+    def assess_velocity(self, category: HarmCategory, history_window_seconds: int = 604800) -> float: ...
 
 
 class ConsentOracle(Protocol):
