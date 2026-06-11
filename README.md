@@ -238,6 +238,9 @@ The Constitutional Engine v2.2 includes an **426-test enterprise suite** ensurin
 
 The engine passes **100% of constitutional logic tests** (Law screening, gradient actions, hash chaining, etc.). Tests marked as failing or skipped are **stubs for external dependencies** (`HarmDetector`, `ConsentOracle`, `EmotionalSignalFeed`). These are platform-specific integrations — the engine runs correctly without them in test mode. See the [FAQ](#anticipated-critiques) for details.
 
+* Compliance and endurance tests that are marked mixed are awaiting platform‑specific integrations – not failures of constitutional logic.
+  
+---
 ### Running the Tests
 
 ```bash
