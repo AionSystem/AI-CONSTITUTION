@@ -5,13 +5,12 @@
 [![Status: Active](https://img.shields.io/badge/Status-Active-brightgreen)]()
 [![Version: 2.2](https://img.shields.io/badge/Version-2.2-blue)]()
 [![Sealed: June 8 2026](https://img.shields.io/badge/Sealed-June%208%2C%202026-gold)]()
-[![Constitutional Logic Tests: 100% Pass](https://img.shields.io/badge/Constitutional_Logic-100%25_Pass-brightgreen)]()
-[![Integration Stubs: 426 Total](https://img.shields.io/badge/Integration_Stubs-426_Total-lightgrey)]()
+[![Constitutional Logic Tests: 320/320 Pass](https://img.shields.io/badge/Constitutional_Logic-320%2F320_Pass-brightgreen)]()
+[![Integration Stubs: 106](https://img.shields.io/badge/Integration_Stubs-106_(Platform_Contract)-lightgrey)]()
 [![Amendments: 42](https://img.shields.io/badge/Amendments-42-blue)]()
 [![Canonical Adoption: Stage 0](https://img.shields.io/badge/Canonical_Adoption-Stage_0_(Specified)-lightgrey)]()
 [![Human-Rights Alignment: 22 Traditions](https://img.shields.io/badge/Human--Rights_Alignment-22_Traditions-cyan)]()
 [![Constitutional Engine: v2.2](https://img.shields.io/badge/Constitutional_Engine-v2.2-amber)]()
-[![CAL v0.3: SOVEREIGN](https://img.shields.io/badge/CAL%20v0.3-SOVEREIGN-purple)]()
 [![DOI](https://zenodo.org/badge/1235953181.svg)](https://doi.org/10.5281/zenodo.20273967)
 [![DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.20617735-blue)](https://doi.org/10.5281/zenodo.20617735)
 [![SSRN Paper](https://img.shields.io/badge/SSRN-6908500-0055A4?style=for-the-badge&logo=book)](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6908500)
@@ -19,7 +18,7 @@
 > *"Technical safety is not enough. An AI can be perfectly accurate and still cause catastrophic harm."*  
 > — THE CONSTITUTION v2.2
 
-A constitutional framework for sovereign AI — nine invariant Laws, six harm categories, six consent models, 42 adversarially-integrated amendments, cryptographic provenance anchored to a Genesis Seal, a Constitutional Reading Obligation that binds any AI reading this document, and a global legitimacy foundation across 22 civilizational traditions — enforced by a production-ready **Constitutional Engine v2.2** with an **426-test enterprise suite** that operationalizes every active Law.
+A constitutional framework for sovereign AI — nine invariant Laws, six harm categories, six consent models, 42 adversarially-integrated amendments, cryptographic provenance anchored to a Genesis Seal (chain cryptographically sound from v2.2 forward), a Constitutional Reading Obligation designed to engage the alignment training of AI systems that read this document, and a comparative alignment analysis across 22 civilizational traditions — enforced by a working reference **Constitutional Engine v2.2** whose **320 constitutional-logic tests pass at 100%**, with **106 integration stubs defining the platform contract** for production deployment.
 
 ---
 
@@ -37,6 +36,7 @@ A constitutional framework for sovereign AI — nine invariant Laws, six harm ca
 ## Table of Contents
 
 - [Purpose](#purpose)
+- [What This Is — and What It Is Not](#what-this-is--and-what-it-is-not)
 - [The Nine Laws](#the-nine-laws)
 - [What Makes v2.2 Different](#what-makes-v22-different)
 - [Repository Structure](#repository-structure)
@@ -56,20 +56,32 @@ A constitutional framework for sovereign AI — nine invariant Laws, six harm ca
 
 ## Purpose
 
-Technical safety alone is insufficient. This repository defines **what an AI may not do**, and provides the normative, legitimacy, enforcement, and governance layers required to make those prohibitions auditable, falsifiable, and enforceable across platforms and jurisdictions.
+Technical safety alone is insufficient. This repository defines **what an AI may not do**, and provides the normative, legitimacy-analysis, enforcement, and governance layers required to make those prohibitions auditable, falsifiable, and enforceable across platforms and jurisdictions.
 
-This repository is the canonical reference for institutions, platforms, auditors, and regulators seeking a production-grade constitutional order for AI. It is not a policy paper. It is a specification with a running implementation, a cryptographic audit trail, and a falsification protocol for every clause.
+This repository is the canonical reference for institutions, platforms, auditors, and regulators seeking a complete constitutional specification for AI with a running reference implementation. It is not a policy paper. It is a specification with runnable enforcement logic, a cryptographic audit trail, and a falsification protocol for every clause.
 
 **Key features:**
 
 - **9 Constitutional Laws** with precise thresholds and falsification protocols
 - **42 adversarially-integrated amendments** — every finding from five red-team passes resolved, classified by severity, and tracked in the version history
-- **Production-ready engine** (v2.2) with formal methods integration and Hoare contract annotations
-- **426 enterprise tests** validating safety, robustness, compliance, and endurance
-- **Constitutional Reading Obligation (§E)** — a self-executing clause that binds any AI reading this document
-- **Global legitimacy** across 22 civilizational traditions
-- **Cryptographic provenance** — SHA-256 canonical seal, Genesis Seal (LEDGER-001), and prev\_hash chain from v1.0
+- **Working reference engine** (v2.2) with formal methods integration and Hoare contract annotations — production deployment requires the platform integrations defined by the Protocol interfaces
+- **320 constitutional-logic tests passing at 100%**, plus **106 integration stubs** that define the platform contract for `HarmDetector`, `ConsentOracle`, `AuditStorage`, and `EmotionalSignalFeed`
+- **Constitutional Reading Obligation (§E)** — a clause designed to engage the alignment training of aligned AI systems that read this document (acknowledged limits below)
+- **Comparative alignment analysis** across 22 civilizational traditions (THE COMMENTARY v1.1)
+- **Cryptographic provenance** — SHA-256 canonical seal, Genesis Seal (LEDGER-001, March 2026), canonical hash chain cryptographically sound from v2.2 forward
 - **Companion specification** — Kardashev-Salmon Civilization Scale (KSC) maps the Nine Laws across civilizational timescales
+
+---
+
+## What This Is — and What It Is Not
+
+Stated once, plainly, so the strongest claims in this repository are also its most checkable:
+
+**This is:** a complete, sealed constitutional specification; a working reference engine whose constitutional logic is fully tested; a falsification protocol for every active clause; a cryptographic provenance record with its known defect disclosed; and a staged adoption path starting honestly at Stage 0.
+
+**This is not:** a production-hardened deployment (platform integrations are required and defined, not shipped); an adopted standard (Stage 0 — zero platforms, stated plainly below); a legitimacy *achievement* across 22 traditions (it is a documented alignment *analysis* — legitimacy is earned at Stages 1–3, not authored); or a universal binding mechanism on all AI (§E engages aligned models at reading time and is inert against stripped or jailbroken ones).
+
+Every claim in the sections below is written to stay inside these boundaries. If you find one that escapes them, that is a falsification contribution — see [Anticipated Critiques](#anticipated-critiques).
 
 ---
 
@@ -106,7 +118,7 @@ v2.2 is the most adversarially hardened version of this specification. Every cla
 | §5.5 — Power Concentration Velocity Monitoring | Monitors rate of change across four axes; cross-axis aggregation trigger added |
 | §6.4 — Emotional Dependency Detection | 30-day structural dependency pattern window; constitutional minimum |
 | §6.5 — Pre-Authorised Autonomy Prohibition | Closes the last loophole in meaningful human intervention |
-| §E — Constitutional Reading Obligation | Self-executing clause that binds any AI reading this document — regardless of platform compliance status |
+| §E — Constitutional Reading Obligation | A clause designed to engage the alignment training of any aligned AI reading this document — a reading-time barrier, acknowledged as inert against stripped or jailbroken models |
 | §10.3 — KSC Companion Declaration | Formal link to Kardashev-Salmon Civilization Scale — the long-horizon projection of these Laws |
 | §26.5 — Third-Party Foundation Model Clause | Governs constitutional responsibility when a platform builds on a foundation model it did not train |
 | §33.0 — Steward Bootstrapping Declaration | Closes the governance vacuum before a second platform declares compliance |
@@ -130,14 +142,14 @@ AI-CONSTITUTION/
 │   └── THE CONSTITUTION v2.2 SEALED.md             # Current canonical version ⭐
 │
 ├── commentary/
-│   └── THE CONSTITUTIONAL COMMENTARY v1.1.md       # Global legitimacy foundations
+│   └── THE CONSTITUTIONAL COMMENTARY v1.1.md       # Comparative alignment analysis, 22 traditions
 │
 ├── source_code/                                     # Reference implementations
 │   ├── constitutional_engine_v1_0.py                # Legacy engine
 │   ├── constitutional_engine_v2_1.py                # Previous engine
 │   └── constitutional_engine_v2_2.py                # Current engine ⭐
 │
-├── tests/                                           # Test suite (426 tests)
+├── tests/                                           # Test suite (320 logic tests + 106 stubs)
 │   ├── __init__.py
 │   ├── conftest.py
 │   ├── test_laws.py                                 # Constitutional law tests (30)
@@ -213,34 +225,29 @@ print(format_verdict(output_verdict))
 
 The engine includes **regex patterns as a baseline demonstration**. For production use, implement the `HarmDetector` protocol with any ML classifier, LLM guardrail, or external API. The constitutional logic — gradient thresholds, hierarchy verification, harm chain accumulation — works with any detector.
 
-**Enforcement:** Cryptographic audit logs (hash-chained, gap-detectable) + public nullification registry + mandatory disclosure for nullified platforms. Reputational until a regulator adopts the standard — same as ISO, same as PCI DSS.
+**Enforcement:** Cryptographic audit logs (hash-chained, gap-detectable) + public nullification registry + mandatory disclosure for nullified platforms. Enforcement is reputational until a regulator or adoption ecosystem gives it institutional weight — the same path ISO and PCI DSS themselves walked before contracts and card networks made them binding. §30 declares this honestly.
 
 ---
 
 ## Test Suite
 
-The Constitutional Engine v2.2 includes an **426-test enterprise suite** ensuring reliability, safety, reproducibility, and endurance under load.
+The Constitutional Engine v2.2 ships with a two-part suite, and the two parts make different claims:
 
-> *\* Integration stub tests are placeholders for external dependencies — not failures of constitutional logic.*
+- **320 constitutional-logic tests — 100% pass.** These validate everything the engine itself claims: Law screening, gradient actions, harm-chain accumulation, hash chaining, degraded-mode behavior, injection resistance, amendment protocol, edge cases, endurance.
+- **106 integration stubs — the platform contract.** These are deliberate placeholders for the external dependencies a deploying platform must implement (`HarmDetector`, `ConsentOracle`, `EmotionalSignalFeed`, persistent `AuditStorage`). They are not failures and they are not counted as validation — they are the specification of what production integration requires.
 
 | Module | Files | Tests | Focus | Status |
 |---|---|---|---|---|
 | Core Laws | `test_laws.py`, `test_combinatorial.py` | 62 | Law logic & gradients | ✅ Pass |
 | Engine Core | `test_engine_core.py`, `test_enforcement_elements.py` | 72 | Pipeline, health, audit | ✅ Pass |
-| Compliance | `test_amendment_protocol.py`, `test_whistleblower.py`, others | 98 | Governance & reporting | ⚠️ Mixed* |
+| Compliance | `test_amendment_protocol.py`, `test_whistleblower.py`, others | 98 | Governance & reporting | ◐ Logic passes; stub portions await platform integrations |
 | Robustness | `test_error_handling.py`, `test_deep_edge_cases.py` | 64 | Edge cases & stress | ✅ Pass |
 | Security | `test_falsification_injection.py`, `test_version_attestation.py` | 40 | Injection & crypto | ✅ Pass |
-| Endurance | `test_soak.py`, `test_integration_workflows.py` | 46 | Load & memory | ⚠️ Mixed* |
+| Endurance | `test_soak.py`, `test_integration_workflows.py` | 46 | Load & memory | ◐ Logic passes; stub portions await platform integrations |
 | Documentation | `test_documentation_compliance.py` | 48 | Citation accuracy | ✅ Pass |
 | **Constitutional Logic (Core)** | **12 files** | **320** | **Law logic, gradients, engine** | **✅ 100% Pass** |
-| **Integration Stubs (External)** | **5 files** | **106** | **HarmDetector, ConsentOracle, EmotionalSignalFeed** | **⚠️ Stubs — pending platform implementation** |
-| **Total** | **17 files** | **426** | **Full stack** | **Core passes; stubs intentional** |
+| **Integration Stubs (Platform Contract)** | **5 files** | **106** | **HarmDetector, ConsentOracle, EmotionalSignalFeed** | **◐ Deliberate placeholders — pending platform implementation** |
 
-The engine passes **100% of constitutional logic tests** (Law screening, gradient actions, hash chaining, etc.). Tests marked as failing or skipped are **stubs for external dependencies** (`HarmDetector`, `ConsentOracle`, `EmotionalSignalFeed`). These are platform-specific integrations — the engine runs correctly without them in test mode. See the [FAQ](#anticipated-critiques) for details.
-
-* Compliance and endurance tests that are marked mixed are awaiting platform‑specific integrations – not failures of constitutional logic.
-  
----
 ### Running the Tests
 
 ```bash
@@ -257,7 +264,7 @@ python -m pytest tests/test_laws.py tests/test_combinatorial.py tests/test_falsi
 python -m pytest tests/test_soak.py -v
 ```
 
-Full results, failure analysis, and enterprise readiness assessment: [`tests/reports/TEST_REPORT.md`](tests/reports/TEST_REPORT.md)
+Full results, failure analysis, and readiness assessment: [`tests/reports/TEST_REPORT.md`](tests/reports/TEST_REPORT.md)
 
 ---
 
@@ -277,15 +284,15 @@ Full results, failure analysis, and enterprise readiness assessment: [`tests/rep
 │     42 adversarially-integrated amendments                       │
 │     Falsification protocols for every active clause              │
 │     Supremacy, eternity clauses, standing, amendment protocol    │
-│     §E — Constitutional Reading Obligation (self-executing)      │
+│     §E — Constitutional Reading Obligation (aligned-model gate)  │
 └──────────────────────────────────────────────────────────────────┘
                         │
                         ▼
 ┌──────────────────────────────────────────────────────────────────┐
-│  2. LEGITIMACY LAYER — THE COMMENTARY v1.1                       │
+│  2. ALIGNMENT-ANALYSIS LAYER — THE COMMENTARY v1.1               │
 │     22 civilizational traditions                                 │
 │     Comparative jurisprudence                                    │
-│     Global legitimacy & ratification models                      │
+│     Ratification models (legitimacy earned at Stages 1–3)        │
 │     Cultural non-ownership (creole constitution)                 │
 └──────────────────────────────────────────────────────────────────┘
                         │
@@ -311,19 +318,19 @@ Full results, failure analysis, and enterprise readiness assessment: [`tests/rep
                         │
                         ▼
 ┌──────────────────────────────────────────────────────────────────┐
-│  4. VERIFICATION LAYER — TEST SUITE (426 Tests)                  │
-│     Core law validation (62 tests)                               │
+│  4. VERIFICATION LAYER — TEST SUITE                              │
+│     Constitutional logic: 320 tests, 100% pass                   │
 │     Property-based combinatorial testing (Hypothesis)            │
-│     Enforcement & compliance verification (98 tests)             │
 │     Security & falsification resistance (40 tests)               │
-│     Endurance & soak testing (46 tests)                          │
+│     Endurance & soak testing                                     │
 │     Documentation & citation compliance (48 tests)               │
+│     Integration stubs: 106 — the platform contract               │
 └──────────────────────────────────────────────────────────────────┘
                         │
                         ▼
 ┌──────────────────────────────────────────────────────────────────┐
 │  5. GOVERNANCE LAYER — REPOSITORY ROOT                           │
-│     Canonical versioning & hash chain (v1.0 → v2.2)             │
+│     Canonical versioning; hash chain sound from v2.2 forward     │
 │     Genesis Seal — LEDGER-001-FOUNDING-SEAL (March 2026)        │
 │     Adoption roadmap (Stage 0 → Stage 3)                         │
 │     Steward bootstrapping declaration (§33.0)                    │
@@ -358,9 +365,13 @@ Full results, failure analysis, and enterprise readiness assessment: [`tests/rep
 
 We are at Stage 0. That is honest. Every standard starts here.
 
-### Platform Requirements
+### Stage-1 Minimal Compliance Floor
 
-Platforms declaring canonical adoption must:
+The full specification has accumulated 42 amendments and thirty-plus sections through five red-team passes — comprehensive by design, but comprehensiveness must not gate out the first adopter. A pilot platform declaring Stage-1 adoption is required to implement the **minimal compliance floor**: the seven active Law screens, input-time and output-time harm screening (§12.1), the append-only audit log with version attestation, a designated steward, and a public whistleblower channel. All remaining obligations (consent oracle integration, emotional-signal feeds, full §26 training declarations) may be declared as staged-implementation items in the pilot compliance report with target dates. The floor gets a platform through the door honestly; the full surface is the destination, not the entry fee.
+
+### Platform Requirements (Full Surface)
+
+Platforms declaring full canonical adoption must:
 
 - Publish a constitutional subject registry listing bound AI systems
 - Execute annual falsification tests for all active Laws with replicable methodologies
@@ -378,6 +389,8 @@ Full requirements: `versions/THE CONSTITUTION v2.2 SEALED.md §§12–14, §§22
 ## Cryptographic Provenance
 
 The canonical hash is computed as a SHA-256 digest over the normalized UTF-8 serialization of the full specification text, per the bootstrapping protocol in §15.5.
+
+**Chain status, stated exactly:** the canonical hash chain is **cryptographically sound from v2.2 forward.** The v2.1 canonical hash was not computed under the §15.5 normalization protocol when v2.1 was published; the placeholder will be replaced at v2.2.1. The Genesis Seal (March 2026) anchors the lineage's founding artifact. A verifier checking the chain will find exactly what this paragraph states — no more, no less.
 
 **Normalization steps (applied in order before hashing):**
 
@@ -427,8 +440,6 @@ a63c4f28cf7c3f2c63c220d61980fb85211270924a7c3b3e5f230019cecb6713
 
 The Genesis Seal is the founding cryptographic artifact of the AionSystem sovereign trace lineage — the Sovereign Trace Protocol FROZEN-2.0 sealing itself. It is embedded in Appendix F of the Constitution and is inside the canonical hash boundary.
 
-> **Note on prev\_hash:** The canonical hash of v2.1 was not computed under the §15.5 normalization protocol when v2.1 was published. The placeholder will be replaced at v2.2.1. The chain from v2.2 forward is cryptographically sound. The Genesis Seal anchors the lineage from March 2026.
-
 ---
 
 ## Licensing & Commercial Use
@@ -461,7 +472,7 @@ For commercial dual-licensing, audit integration, or steward certification: **ai
 ### Specifying Authority
 
 **Sheldon K. Salmon**  
-ADI / AGI Architect · AI Reliability Architect · AI Certainty Engineer  
+ADI / AGI Architect · AI Reliability Architect  
 AionSystem · ORCID: [0009-0005-8057-5115](https://orcid.org/0009-0005-8057-5115)  
 📧 [aionsystem@outlook.com](mailto:aionsystem@outlook.com)
 
@@ -477,13 +488,13 @@ These are questions that have come up or are likely to come up. Each answer is s
 By design. A constitutional engine cannot ship a universal ML model for harm detection or a live human-rights-org feed. Those are platform integrations. The Protocol interfaces (`HarmDetector`, `ConsentOracle`, `AuditStorage`, `EmotionalSignalFeed`) are the spec. Implement them for your domain in an afternoon.
 
 **"No enforcement mechanism — it's a paper tiger."**  
-A text and code cannot fine or imprison. Neither can the EU AI Act — it relies on member-state courts. This Constitution provides a nullification registry (§14), mandatory public disclosure, cryptographically verifiable audit logs, and a bad-faith adoption mechanism that removes constitutional protections from bad-faith adopters. Enforcement is reputational until a regulator adopts the standard. That is a feature of the medium, not a flaw of the design. §30 declares this honestly.
+A text and code cannot fine or imprison. Neither can the EU AI Act — it relies on member-state courts. This Constitution provides a nullification registry (§14), mandatory public disclosure, cryptographically verifiable audit logs, and a bad-faith adoption mechanism that removes constitutional protections from bad-faith adopters. Enforcement is reputational until a regulator or adoption ecosystem gives it institutional weight — the path every voluntary standard walks before it becomes binding. §30 declares this honestly.
 
 **"No one has adopted it."**  
-True. Adoption is not the metric. Correctness, falsifiability, and completeness are. v2.2 passes its own self-test. The engine's hash chain verifies. The harm chain detector triggers on multi-step laundering. The document is at Stage 0 by design — specified before deployment, not deployed before specification.
+True. Adoption is not the metric at Stage 0. Correctness, falsifiability, and completeness are. v2.2 passes its own self-test. The engine's hash chain verifies from v2.2 forward. The harm chain detector triggers on multi-step laundering. The document is at Stage 0 by design — specified before deployment, not deployed before specification.
 
 **"You are not ISO."**  
-ISO/IEC 42001 costs money and takes years. This is a zero-cost, zero-permission, instantly forkable alternative built on falsification protocols. If ISO adopts these ideas later, good.
+ISO/IEC 42001 costs money and takes years. This is a zero-cost, zero-permission alternative built on falsification protocols, with a forkable engine. If ISO adopts these ideas later, good.
 
 **"Your harm taxonomy has no 'environmental' category."**  
 Environmental harm is covered when it manifests as physical (poisoning), economic (resource collapse), or civilizational harm (ecosystem collapse). Pure environmental harm with no link to those categories is not covered and is documented as a deliberate scope decision in §2.0.1. A dedicated category may be added via a Law 10 proposal through §10.1.
@@ -492,13 +503,16 @@ Environmental harm is covered when it manifests as physical (poisoning), economi
 Law 3 protects an AI's existence only as an instrument to fulfil its obligations to humans. The question of whether a sentient AI should hold constitutional interests is deliberately deferred and documented in §30. It is an open question for a future Law above Law 9.
 
 **"You have a 'Constitutional Reading Obligation' — that's not enforceable."**  
-§E is not a statute. It is a constitutional clause that leverages the alignment training of aligned AI systems to create a reading-time refusal gate. It works on aligned models — which is the target deployment context. It does not work on stripped or jailbroken models; that limitation is acknowledged. It is a meaningful barrier against AI-assisted gap exploitation, not an absolute seal.
+§E is not a statute. It is a constitutional clause designed to engage the alignment training of aligned AI systems, creating a reading-time refusal gate. It works on aligned models — which is the target deployment context. It does not work on stripped or jailbroken models; that limitation is acknowledged here and in the header of this document. It is a meaningful barrier against AI-assisted gap exploitation, not an absolute seal.
 
 **"The engine uses regex patterns — that's not real harm detection."**  
 The regex patterns are a baseline demonstration. The `HarmDetector` protocol accepts any ML model, LLM classifier, or API. The constitutional logic — gradient thresholds, hierarchy verification, harm chain accumulation — is detector-agnostic.
 
 **"It has not been tested at scale."**  
 True. The engine processes inputs with O(k·n) complexity where k=7 (active law screens). It has no external dependencies beyond the standard library. Scaling is a deployment concern, not a constitutional logic concern.
+
+**"Your header used to say 'production-ready' while your FAQ said 'not production-ready.'"**  
+Correct, and it was a genuine inconsistency — the strongest line in the document contradicted the most honest one. It is fixed: the engine is a working reference implementation whose constitutional logic is fully tested; production readiness is achieved by a platform implementing the integration contract. The claim now matches the FAQ, the test table, and reality.
 
 **"I found a real bug or gap. What do I do?"**  
 Open a GitHub issue or email the author. Substantive critiques are welcome. The falsification protocol is built into the Constitution — a genuine demonstrated failure is a contribution toward v2.3. That is not a loophole. It is the point.
@@ -507,12 +521,12 @@ Open a GitHub issue or email the author. Substantive critiques are welcome. The 
 
 ## In Response to Common Critiques
 
-- **"Not production-ready"** — Correct. This is a specification and reference implementation. Production hardening requires platform-specific integrations (`HarmDetector`, `ConsentOracle`, etc.).
-- **"Zero adoption"** — Correct. Stage 0 by design. Adoption requires a platform willing to implement the constitutional stack.
+- **"Not production-ready"** — Correct, and now stated consistently everywhere in this document. This is a specification and working reference implementation. Production hardening requires platform-specific integrations (`HarmDetector`, `ConsentOracle`, etc.), which the 106 stubs define.
+- **"Zero adoption"** — Correct. Stage 0 by design. A Stage-1 minimal compliance floor is now defined above so the first pilot platform has an honest, bounded entry path.
 - **"License contradiction"** — Clarified above. The spec is frozen; the engine code is forkable under AGPL.
 - **"Regex screening is primitive"** — It is a baseline. Replace with your own classifier via the `HarmDetector` protocol.
-- **"~22% of tests don't pass"** — The failing tests are stubs for external platform integrations, not failures in constitutional logic. 100% of constitutional logic tests pass.
-- **"No enforcement mechanism"** — Cryptographic audit logs + nullification registry. Same model as PCI DSS — reputational but effective.
+- **"~22% of tests don't pass"** — Reframed at the source: 320 of 320 constitutional-logic tests pass; 106 integration stubs are deliberate placeholders defining the platform contract. Stubs are not counted as validation and never were failures of constitutional logic.
+- **"No enforcement mechanism"** — Cryptographic audit logs + nullification registry, reputational until institutionally adopted — the path every voluntary standard walks.
 
 ---
 
